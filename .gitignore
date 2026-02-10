@@ -1,0 +1,14 @@
+# Maven
+/target/
+
+# IntelliJ IDEA / OpenIDE
+.idea/
+*.iml
+out/
+
+# Gradle (на будущее, если вдруг появится)
+.gradle/
+build/
+
+# OS
+.DS_Store
