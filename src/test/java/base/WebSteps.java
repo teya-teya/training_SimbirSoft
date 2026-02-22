@@ -1,11 +1,15 @@
 package base;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.ConfigReader;
 import utils.WaitHelper;
+
+import java.util.Comparator;
+import java.util.List;
 
 public class WebSteps {
     public WebDriver driver;
@@ -18,13 +22,67 @@ public class WebSteps {
         this.actions = new Actions(driver);
     }
 
-    public void clickOnElement(WebElement element) {
+    public WebSteps goToPage(String url) {
+        driver.navigate().to(ConfigReader.getProperty("base.url") + url);
+
+        return this;
+    }
+
+    public WebSteps clickOnElement(WebElement element) {
         WaitHelper.waitForClickable(wait, element);
         actions.moveToElement(element).click().perform();
+
+        return this;
     }
 
     public void scrollToElement(WebElement element) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
+    }
+
+    public WebSteps selectOptionByText(WebElement dpd, String option) {
+        clickOnElement(dpd);
+        Select select = new Select(dpd);
+        select.selectByVisibleText(option);
+
+        return this;
+    }
+
+    public WebElement getInput(String label) {
+        return driver.findElement(By.xpath("//label[contains(text(),'%s')]/following-sibling::input".formatted(label)));
+    }
+
+    public WebSteps fillInput(WebElement input, String value) {
+        WaitHelper.waitForVisible(wait, input);
+        input.clear();
+        input.sendKeys(value);
+
+        return this;
+    }
+
+    public WebSteps cleanInput(WebElement input) {
+        WaitHelper.waitForVisible(wait, input);
+        input.clear();
+
+        return this;
+    }
+
+    public String getLongestValue(List<WebElement> elements) {
+        return elements.stream()
+                .map(el -> el.getAttribute("value"))
+                .max(Comparator.comparingInt(String::length))
+                .orElse("");
+    }
+
+    public void clickOkInAlert() {
+        Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+        alert.accept();
+
+    }
+
+    public WebSteps refreshPage() {
+        driver.navigate().refresh();
+
+        return this;
     }
 }

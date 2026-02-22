@@ -11,6 +11,8 @@ import utils.ConfigReader;
 
 import java.util.List;
 
+import static java.lang.Thread.sleep;
+
 public class WebChecks {
     public WebDriver driver;
     public WebDriverWait wait;
@@ -29,6 +31,15 @@ public class WebChecks {
         Assert.assertTrue(element.isDisplayed(), "Элемент не отображается");
 
         return this;
+    }
+
+    public void checkElementNotVisible(WebElement element) throws InterruptedException {
+        sleep(1000);
+        Assert.assertFalse(element.isDisplayed(), "Элемент отображается");
+    }
+
+    public void assertElementNotPresent(List<WebElement> elements, String text) {
+        Assert.assertTrue(elements.isEmpty(), "Элемент с текстом '" + text + "' отображается");
     }
 
     public WebChecks checkElementsVisible(List<WebElement> elements) {
