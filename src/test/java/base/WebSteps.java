@@ -60,11 +60,10 @@ public class WebSteps {
         return this;
     }
 
-    public WebSteps cleanInput(WebElement input) {
+    public void cleanInput(WebElement input) {
         WaitHelper.waitForVisible(wait, input);
         input.clear();
 
-        return this;
     }
 
     public String getLongestValue(List<WebElement> elements) {

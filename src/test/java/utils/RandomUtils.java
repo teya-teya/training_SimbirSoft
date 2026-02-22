@@ -11,7 +11,7 @@ public class RandomUtils {
         return faker.name().fullName();
     }
 
-    public static String username() { return  faker.name().username().toLowerCase();}
+    public static String username() { return  (faker.name().firstName() + faker.name().lastName()).toLowerCase();}
 
     public static String password() {
         return faker.internet().password(12, 18, true, true, true);
