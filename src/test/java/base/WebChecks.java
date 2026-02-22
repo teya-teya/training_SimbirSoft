@@ -86,4 +86,8 @@ public class WebChecks {
                 " Перехода на " + url.getDescription() + "не произошло");
     }
 
+    public void checkElementDisable(WebElement element) {
+        Assert.assertNotNull(element.getAttribute("disabled"), "Элемент должен быть disabled");
+    }
+
 }
