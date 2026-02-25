@@ -17,7 +17,7 @@ public class LifetimeMembershipPage {
         PageFactory.initElements(driver, this);
     }
 
-    @FindBy(css = "section[data-id='c4bff92'] h1")
+    @FindBy(css = "section h1.elementor-heading-title")
     public WebElement title;
 
 }

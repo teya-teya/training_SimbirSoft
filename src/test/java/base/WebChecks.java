@@ -9,9 +9,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import utils.ConfigReader;
 
+import java.time.Duration;
 import java.util.List;
-
-import static java.lang.Thread.sleep;
 
 public class WebChecks {
     public WebDriver driver;
@@ -33,12 +32,16 @@ public class WebChecks {
         return this;
     }
 
-    public void checkElementNotVisible(WebElement element) throws InterruptedException {
-        sleep(1000);
-        Assert.assertFalse(element.isDisplayed(), "Элемент отображается");
+    public void checkElementNotVisible(By locator, int timeoutSeconds) {
+        WebDriverWait customWait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
+        boolean invisible = customWait.until(
+                ExpectedConditions.invisibilityOfElementLocated(locator)
+        );
+
+        Assert.assertTrue(invisible, "Элемент все еще виден: " + locator);
     }
 
-    public void assertElementNotPresent(List<WebElement> elements, String text) {
+    public void checkElementNotPresent(List<WebElement> elements, String text) {
         Assert.assertTrue(elements.isEmpty(), "Элемент с текстом '" + text + "' отображается");
     }
 
@@ -47,7 +50,7 @@ public class WebChecks {
             Assert.fail("Список элементов пустой");
         }
         wait.until(ExpectedConditions.visibilityOf(elements.get(0)));
-        for(WebElement elem : elements) {
+        for (WebElement elem : elements) {
             Assert.assertTrue(elem.isDisplayed(), "Элемент не отображается");
         }
 
@@ -83,7 +86,7 @@ public class WebChecks {
     public void checkNavigateTo(URL url) {
         String currentUrl = driver.getCurrentUrl();
         Assert.assertEquals(currentUrl, ConfigReader.getProperty("base.url") + url.getUrl(),
-                " Перехода на " + url.getDescription() + "не произошло");
+                " Перехода на " + url.getDescription() + "не произошло, открыта страница " + currentUrl);
     }
 
     public void checkElementDisable(WebElement element) {

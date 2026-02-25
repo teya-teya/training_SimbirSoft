@@ -1,5 +1,7 @@
 package pages;
 
+import base.WebChecks;
+import base.WebSteps;
 import components.Banner;
 import components.Footer;
 import components.Header;
@@ -15,7 +17,8 @@ import java.util.List;
 public class MainPage {
     public WebDriver driver;
     public WebDriverWait wait;
-
+    public WebChecks webChecks;
+    public WebSteps webSteps;
     public final Header header;
     public final Banner banner;
     public final Footer footer;
@@ -24,6 +27,8 @@ public class MainPage {
         this.driver = driver;
         this.wait = wait;
         PageFactory.initElements(driver, this);
+        this.webChecks = new WebChecks(driver, wait);
+        this.webSteps = new WebSteps(driver, wait);
         this.header = new Header();
         PageFactory.initElements(driver, this.header);
         this.banner = new Banner();
@@ -52,4 +57,9 @@ public class MainPage {
         return null;
     }
 
+    public void closeBanner() {
+        if (webChecks.isPresent(banner.bannerLocator)) {
+            webSteps.clickOnElement(banner.btnX);
+        }
+    }
 }

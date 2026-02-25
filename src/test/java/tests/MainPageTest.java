@@ -1,6 +1,5 @@
 package tests;
 
-import base.BaseTest;
 import base.WebChecks;
 import base.WebSteps;
 import enums.CONTACTS;
@@ -9,7 +8,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.LifetimeMembershipPage;
 import pages.MainPage;
-import utils.WaitHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +26,7 @@ public class MainPageTest extends BaseTest {
         webSteps = new WebSteps(driver, wait);
         lifetimeMembershipPage = new LifetimeMembershipPage(driver, wait);
 
-        if (webChecks.isPresent(mainPage.banner.bannerLocator)) {
-            webSteps.clickOnElement(mainPage.banner.btnX);
-        }
+        mainPage.closeBanner();
     }
 
     @Test(description = "Проверка открытия страницы")
@@ -40,9 +36,7 @@ public class MainPageTest extends BaseTest {
                 .checkElementsVisible(mainPage.courses)
                 .checkElementVisible(mainPage.footer.footerElement);
 
-        if (webChecks.isPresent(mainPage.locatorLearnMore)) {
-            WaitHelper.waitForNotVisible(wait, mainPage.btnLearnMore);
-        }
+        webSteps.waitElementNotVisible(mainPage.locatorLearnMore, mainPage.btnLearnMore);
 
         webChecks.checkElementVisible(mainPage.btnRegisterNow);
     }
@@ -58,11 +52,6 @@ public class MainPageTest extends BaseTest {
                 .checkElementVisible(mainPage.header.getLinkSocialsPage("Linkedin"))
                 .checkElementVisible(mainPage.header.getLinkSocialsPage("Google"))
                 .checkElementVisible(mainPage.header.getLinkSocialsPage("YouTube"));
-    }
-
-    @Test(description = "Проверка блока с курсами (Most Popular Software Testing Courses)")
-    void test_01_3() {
-        //нет кнопок
     }
 
     @Test(description = "Проверка футера")
@@ -87,7 +76,6 @@ public class MainPageTest extends BaseTest {
     void test_03() {
         webSteps.clickOnElement(mainPage.getReadMoreButtonByCourseText("Lifetime Membership"));
         webChecks.checkTextOnElement(lifetimeMembershipPage.title, "LIFETIME MEMBERSHIP CLUB")
-        .checkNavigateTo(URL.LIFETIME_MEMBERSHIP);
-
+                .checkNavigateTo(URL.LIFETIME_MEMBERSHIP);
     }
 }

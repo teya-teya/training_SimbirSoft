@@ -15,11 +15,13 @@ public class WebSteps {
     public WebDriver driver;
     public WebDriverWait wait;
     public Actions actions;
+    public WebChecks webChecks;
 
     public WebSteps(WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
         this.wait = wait;
         this.actions = new Actions(driver);
+        this.webChecks = new WebChecks(driver, wait);
     }
 
     public WebSteps goToPage(String url) {
@@ -63,7 +65,6 @@ public class WebSteps {
     public void cleanInput(WebElement input) {
         WaitHelper.waitForVisible(wait, input);
         input.clear();
-
     }
 
     public String getLongestValue(List<WebElement> elements) {
@@ -83,5 +84,11 @@ public class WebSteps {
         driver.navigate().refresh();
 
         return this;
+    }
+
+    public void waitElementNotVisible(By locator, WebElement element) {
+        if (webChecks.isPresent(locator)) {
+            WaitHelper.waitForNotVisible(wait, element);
+        }
     }
 }

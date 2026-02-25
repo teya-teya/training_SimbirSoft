@@ -1,6 +1,5 @@
 package tests;
 
-import base.BaseTest;
 import base.WebChecks;
 import base.WebSteps;
 import enums.URL;
@@ -70,13 +69,13 @@ public class Way2AutomationBankingAppTest extends BaseTest {
     @DataProvider(name = "depositData")
     public Object[][] depositData() {
         return new Object[][]{
-                {100321, true},
-                {0, false}
+                {100321, "Deposit Successful"},
+                {0, null}
         };
     }
 
     @Test(description = "Проверка пополнения счета", dataProvider = "depositData")
-    void test_05_3_1(int amount, boolean successful) throws InterruptedException {
+    void test_05_3_1(int amount, String expectedMessage) {
         managerPage.createCustomerWithAccount(nameParts[0], nameParts[1], RandomUtils.postCode(), "Rupee");
 
         webSteps.goToPage(URL.LOGIN.getUrl())
@@ -84,13 +83,8 @@ public class Way2AutomationBankingAppTest extends BaseTest {
 
         customerPage.login(nameParts[0] + " " + nameParts[1]);
 
-        accountPage.deposit(amount);
-
-        if (successful) {
-            webChecks.checkTextOnElement(accountPage.message, "Deposit Successful");
-        } else {
-            webChecks.checkElementNotVisible(accountPage.message);
-        }
+        accountPage.deposit(amount)
+                .checkMessage(expectedMessage);
     }
 
     @DataProvider(name = "withdrawData")
@@ -101,8 +95,8 @@ public class Way2AutomationBankingAppTest extends BaseTest {
         };
     }
 
-    @Test(description = "Проверка снятия средств", dataProvider = "withdrawData")
-    public void test_05_3_3(boolean isValid, Integer fixedAmount) {
+    @Test(description = "Проверка спешного снятия средств")
+    public void test_05_3_3() {
 
         managerPage.createCustomerWithAccount(nameParts[0], nameParts[1], RandomUtils.postCode(), "Pound");
 
@@ -114,33 +108,43 @@ public class Way2AutomationBankingAppTest extends BaseTest {
         accountPage.deposit(RandomUtils.getRandomNum(10, 999999));
 
         int balance = accountPage.getBalance();
-        int amount;
-
-        if (isValid) {
-            amount = RandomUtils.getRandomNum(1, balance);
-        } else {
-            amount = fixedAmount;
-        }
+        int amount = RandomUtils.getRandomNum(1, balance);
 
         accountPage.withdrawl(String.valueOf(amount));
 
-        if (isValid) {
-            webChecks.checkTextOnElement(accountPage.message, "Transaction successful");
-        } else {
-            webChecks.checkTextOnElement(accountPage.message, "Transaction Failed. You can not withdraw amount more than the balance.");
-        }
+        webChecks.checkTextOnElement(accountPage.message, "Transaction successful");
 
         webSteps.refreshPage()
                 .clickOnElement(accountPage.btnTransactions);
         WaitHelper.waitForVisible(wait, transactionsPage.table);
 
-        if (isValid) {
-            webChecks.checkTextOnElement(transactionsPage.getTransactionCell(1, 1), String.valueOf(amount));
-        } else {
-            String text = String.valueOf(fixedAmount);
-            webChecks.assertElementNotPresent(transactionsPage.getCellsByText(text), text);
-        }
+        webChecks.checkTextOnElement(transactionsPage.getTransactionCell(1, 1), String.valueOf(amount));
+    }
 
+    @Test(description = "Проверка неуспешного снятия средств")
+    public void test_05_3_4() {
+
+        managerPage.createCustomerWithAccount(nameParts[0], nameParts[1], RandomUtils.postCode(), "Pound");
+
+        webSteps.goToPage(URL.LOGIN.getUrl())
+                .clickOnElement(loginPage.btnCustomerLogin);
+
+        customerPage.login(nameParts[0] + " " + nameParts[1]);
+
+        accountPage.deposit(RandomUtils.getRandomNum(10, 999999));
+
+        int amount = 1000000;
+        String textAmount = String.valueOf(amount);
+
+        accountPage.withdrawl(textAmount);
+
+        webChecks.checkTextOnElement(accountPage.message, "Transaction Failed. You can not withdraw amount more than the balance.");
+
+        webSteps.refreshPage()
+                .clickOnElement(accountPage.btnTransactions);
+        WaitHelper.waitForVisible(wait, transactionsPage.table);
+
+        webChecks.checkElementNotPresent(transactionsPage.getCellsByText(textAmount), textAmount);
     }
 
     @Test(description = "Проверка баланса")
@@ -201,10 +205,9 @@ public class Way2AutomationBankingAppTest extends BaseTest {
                 .clickOnElement(accountPage.btnTransactions);
 
         WaitHelper.waitForVisible(wait, transactionsPage.table);
-        System.out.println(transactionsPage.getRows().size());
 
         webSteps.clickOnElement(transactionsPage.btnReset);
-        webChecks.assertElementNotPresent(transactionsPage.getRows(), "Credit или Debit");
+        webChecks.checkElementNotPresent(transactionsPage.getRows(), "Credit или Debit");
 
         webSteps.clickOnElement(transactionsPage.btnBack);
         webChecks.checkTextOnElement(accountPage.balance, "0");

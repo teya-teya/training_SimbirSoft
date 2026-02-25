@@ -1,12 +1,12 @@
 package tests;
 
-import base.BaseTest;
 import base.WebChecks;
 import base.WebSteps;
 import enums.URL;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.AuthorizationPage;
+import utils.ConfigReader;
 import utils.RandomUtils;
 
 @Test(description = "Проверка авторизации")
@@ -33,7 +33,7 @@ public class AuthorizationTest extends BaseTest {
 
     @Test(description = "Проверка успешной авторизации")
     void test_04_2() {
-        authorizationPage.authorization("angular", "password");
+        authorizationPage.authorization(ConfigReader.getProperty("username"), ConfigReader.getProperty("password"));
         webChecks.checkTextOnElement(authorizationPage.messageSuccess, "You're logged in!!");
     }
 
@@ -45,7 +45,7 @@ public class AuthorizationTest extends BaseTest {
 
     @Test(description = "Проверка успешного разлогирования")
     void test_04_4() {
-        authorizationPage.authorization("angular", "password");
+        authorizationPage.authorization(ConfigReader.getProperty("username"), ConfigReader.getProperty("password"));
         webChecks.checkTextOnElement(authorizationPage.messageSuccess, "You're logged in!!");
         webSteps.clickOnElement(authorizationPage.btnLogout);
         webChecks.checkElementVisible(authorizationPage.inputUsername)
