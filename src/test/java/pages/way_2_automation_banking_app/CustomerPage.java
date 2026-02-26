@@ -35,8 +35,5 @@ public class CustomerPage {
         WaitHelper.waitForVisible(wait, dpdUserSelect);
         webSteps.selectOptionByText(dpdUserSelect, fullName)
                 .clickOnElement(btnLogin);
-
-        WaitHelper.waitForVisible(wait, accountPage.btnDeposit);
-        webChecks.checkTextOnElement(accountPage.welcomeMessage, "Welcome %s !!".formatted(fullName));
     }
 }

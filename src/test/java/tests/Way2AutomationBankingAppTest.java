@@ -38,7 +38,7 @@ public class Way2AutomationBankingAppTest extends BaseTest {
     }
 
     @Test(description = "Проверка регистрации с корректными данными")
-    void test_05_1() {
+    void checkUserRegistrationWithValidData() {
         webSteps.clickOnElement(loginPage.btnSampleForm);
 
         String longestValue = webSteps.getLongestValue(sampleFormPage.hobbies);
@@ -50,7 +50,7 @@ public class Way2AutomationBankingAppTest extends BaseTest {
     }
 
     @Test(description = "Проверка добавления покупателя")
-    void test_05_2_1() {
+    void checkAddingNewCustomerWithValidData() {
         webSteps.clickOnElement(loginPage.btnBankManagerLogin)
                 .clickOnElement(managerPage.btnAddCustomer);
 
@@ -58,7 +58,7 @@ public class Way2AutomationBankingAppTest extends BaseTest {
     }
 
     @Test(description = "Проверка создания учетной записи")
-    void test_05_2_2() {
+    void checkAccountCreationForExistingCustomer() {
         webSteps.clickOnElement(loginPage.btnBankManagerLogin)
                 .clickOnElement(managerPage.btnAddCustomer);
 
@@ -75,7 +75,7 @@ public class Way2AutomationBankingAppTest extends BaseTest {
     }
 
     @Test(description = "Проверка пополнения счета", dataProvider = "depositData")
-    void test_05_3_1(int amount, String expectedMessage) {
+    void checkDepositWithValidAmount(int amount, String expectedMessage) {
         managerPage.createCustomerWithAccount(nameParts[0], nameParts[1], RandomUtils.postCode(), "Rupee");
 
         webSteps.goToPage(URL.LOGIN.getUrl())
@@ -83,20 +83,13 @@ public class Way2AutomationBankingAppTest extends BaseTest {
 
         customerPage.login(nameParts[0] + " " + nameParts[1]);
 
-        accountPage.deposit(amount)
+        accountPage.checkSuccessLogin(nameParts[0] + " " + nameParts[1])
+                .deposit(amount)
                 .checkMessage(expectedMessage);
     }
 
-    @DataProvider(name = "withdrawData")
-    public Object[][] withdrawData() {
-        return new Object[][]{
-                {true, null},
-                {false, 1000000}
-        };
-    }
-
     @Test(description = "Проверка спешного снятия средств")
-    public void test_05_3_3() {
+    public void checkSuccessfulWithdrawalWhenBalanceIsSufficient() {
 
         managerPage.createCustomerWithAccount(nameParts[0], nameParts[1], RandomUtils.postCode(), "Pound");
 
@@ -105,7 +98,8 @@ public class Way2AutomationBankingAppTest extends BaseTest {
 
         customerPage.login(nameParts[0] + " " + nameParts[1]);
 
-        accountPage.deposit(RandomUtils.getRandomNum(10, 999999));
+        accountPage.checkSuccessLogin(nameParts[0] + " " + nameParts[1])
+                .deposit(RandomUtils.getRandomNum(10, 999999));
 
         int balance = accountPage.getBalance();
         int amount = RandomUtils.getRandomNum(1, balance);
@@ -122,7 +116,7 @@ public class Way2AutomationBankingAppTest extends BaseTest {
     }
 
     @Test(description = "Проверка неуспешного снятия средств")
-    public void test_05_3_4() {
+    public void checkFailedWithdrawalWhenBalanceIsInsufficient() {
 
         managerPage.createCustomerWithAccount(nameParts[0], nameParts[1], RandomUtils.postCode(), "Pound");
 
@@ -131,7 +125,8 @@ public class Way2AutomationBankingAppTest extends BaseTest {
 
         customerPage.login(nameParts[0] + " " + nameParts[1]);
 
-        accountPage.deposit(RandomUtils.getRandomNum(10, 999999));
+        accountPage.checkSuccessLogin(nameParts[0] + " " + nameParts[1])
+                .deposit(RandomUtils.getRandomNum(10, 999999));
 
         int amount = 1000000;
         String textAmount = String.valueOf(amount);
@@ -148,12 +143,13 @@ public class Way2AutomationBankingAppTest extends BaseTest {
     }
 
     @Test(description = "Проверка баланса")
-    void test_05_3_5() {
+    void checkBalanceUpdateAfterWithdrawal() {
         managerPage.createCustomerWithAccount(nameParts[0], nameParts[1], RandomUtils.postCode(), "Pound");
         webSteps.goToPage(URL.LOGIN.getUrl())
                 .clickOnElement(loginPage.btnCustomerLogin);
         customerPage.login(nameParts[0] + " " + nameParts[1]);
-        accountPage.deposit(RandomUtils.getRandomNum(10, 999999));
+        accountPage.checkSuccessLogin(nameParts[0] + " " + nameParts[1])
+                .deposit(RandomUtils.getRandomNum(10, 999999));
 
         int balance = accountPage.getBalance();
         int amount = RandomUtils.getRandomNum(1, balance);
@@ -169,12 +165,13 @@ public class Way2AutomationBankingAppTest extends BaseTest {
     }
 
     @Test(description = "Проверка снятия оставшихся средств")
-    void test_05_3_6() {
+    void checkWithdrawalOfRemainingFunds() {
         managerPage.createCustomerWithAccount(nameParts[0], nameParts[1], RandomUtils.postCode(), "Dollar");
         webSteps.goToPage(URL.LOGIN.getUrl())
                 .clickOnElement(loginPage.btnCustomerLogin);
         customerPage.login(nameParts[0] + " " + nameParts[1]);
-        accountPage.deposit(RandomUtils.getRandomNum(10, 999999));
+        accountPage.checkSuccessLogin(nameParts[0] + " " + nameParts[1])
+                .deposit(RandomUtils.getRandomNum(10, 999999));
 
         int balance = accountPage.getBalance();
         int amount = RandomUtils.getRandomNum(1, balance);
@@ -189,12 +186,13 @@ public class Way2AutomationBankingAppTest extends BaseTest {
     }
 
     @Test(description = "Проверка очистки истории транзакций")
-    void test_05_3_7() {
+    void checkTransactionHistoryClearing() {
         managerPage.createCustomerWithAccount(nameParts[0], nameParts[1], RandomUtils.postCode(), "Dollar");
         webSteps.goToPage(URL.LOGIN.getUrl())
                 .clickOnElement(loginPage.btnCustomerLogin);
         customerPage.login(nameParts[0] + " " + nameParts[1]);
-        accountPage.deposit(RandomUtils.getRandomNum(10, 999999));
+        accountPage.checkSuccessLogin(nameParts[0] + " " + nameParts[1])
+                .deposit(RandomUtils.getRandomNum(10, 999999));
 
         int balance = accountPage.getBalance();
         int amount = RandomUtils.getRandomNum(1, balance);
@@ -214,7 +212,7 @@ public class Way2AutomationBankingAppTest extends BaseTest {
     }
 
     @Test(description = "Проверка удаление покупателя")
-    void test_05_4() {
+    void checkCustomerDeletionFromList() {
         managerPage.createCustomerWithAccount(nameParts[0], nameParts[1], RandomUtils.postCode(), "Rupee");
         webSteps.clickOnElement(managerPage.btnCustomers)
                 .fillInput(managerPage.inputSearchCustomer, nameParts[0]);

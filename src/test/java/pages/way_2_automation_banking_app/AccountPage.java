@@ -78,4 +78,11 @@ public class AccountPage {
             webChecks.checkTextOnElement(message, expectedMessage);
         }
     }
+
+    public AccountPage checkSuccessLogin(String fullName) {
+        WaitHelper.waitForVisible(wait, btnDeposit);
+        webChecks.checkTextOnElement(welcomeMessage, "Welcome %s !!".formatted(fullName));
+
+        return this;
+    }
 }

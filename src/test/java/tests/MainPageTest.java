@@ -30,7 +30,7 @@ public class MainPageTest extends BaseTest {
     }
 
     @Test(description = "Проверка открытия страницы")
-    void test_01_1() {
+    void checkOpenMainPage() {
         webChecks.checkElementVisible(mainPage.header.contactsBlock)
                 .checkElementVisible(mainPage.header.navBar)
                 .checkElementsVisible(mainPage.courses)
@@ -42,7 +42,7 @@ public class MainPageTest extends BaseTest {
     }
 
     @Test(description = "Проверка хедера с контактной информацией")
-    void test_01_2() {
+    void checkHeaderContactsAndSocialLinks() {
         List<String> contacts = new ArrayList<>();
         for (CONTACTS contact : CONTACTS.values()) {
             contacts.add(contact.getValue());
@@ -55,7 +55,7 @@ public class MainPageTest extends BaseTest {
     }
 
     @Test(description = "Проверка футера")
-    void test_01_4() {
+    void checkFooterContactsAndInformation() {
         webChecks.checkElementVisible(mainPage.footer.footerElement)
                 .checkTextOnElement(mainPage.footer.contacts.get(0),
                         "Way2Automation\n" +
@@ -67,13 +67,13 @@ public class MainPageTest extends BaseTest {
     }
 
     @Test(description = "Проверка меню навигации при скроллинге")
-    void test_02() {
+    void checkNavigationMenuVisibilityOnScroll() {
         webSteps.scrollToElement(mainPage.footer.footerElement);
         webChecks.checkElementVisible(mainPage.header.navBar);
     }
 
     @Test(description = "Проверка перехода по меню навигации на другие страницы")
-    void test_03() {
+    void checkNavigationToCoursePageFromMainPage() {
         webSteps.clickOnElement(mainPage.getReadMoreButtonByCourseText("Lifetime Membership"));
         webChecks.checkTextOnElement(lifetimeMembershipPage.title, "LIFETIME MEMBERSHIP CLUB")
                 .checkNavigateTo(URL.LIFETIME_MEMBERSHIP);
