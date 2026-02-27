@@ -62,7 +62,11 @@ public class WebSteps {
         return this;
     }
 
-    @Step("Получить поле")
+    /**
+     * Метод для получения полей по заголовку на ним
+     * @param label - текст заголовка над полем
+     * @return поле
+     */
     public WebElement getInput(String label) {
         return driver.findElement(By.xpath("//label[contains(text(),'%s')]/following-sibling::input".formatted(label)));
     }
@@ -109,7 +113,6 @@ public class WebSteps {
         return this;
     }
 
-    @Step("Если элемент '{description}' видим, дождаться, когда он пропадет")
     public void waitElementNotVisible(By locator, WebElement element, String description) {
         if (webChecks.isPresent(locator)) {
             WaitHelper.waitForNotVisible(wait, element);

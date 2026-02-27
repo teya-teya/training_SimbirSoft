@@ -88,6 +88,10 @@ public class ManagerPage {
         webSteps.clickOnElement(deleteBtn);
     }
 
+    /**
+     * Метод для получения строк в таблице
+     * @return строки таблицы
+     */
     private List<WebElement> getRows() {
         return driver.findElements(By.cssSelector("table tbody tr"));
     }

@@ -34,18 +34,30 @@ public class TransactionsPage {
     @FindBy(css = "[ng-click='back()']")
     public WebElement btnBack;
 
-    @Step("Получить строки в таблице транзакций")
+    /**
+     * Метод для получения строк в таблице (исключая первую) в таблице транзакций
+     * @return строки
+     */
     public List<WebElement> getRows() {
         return driver.findElements(By.cssSelector("[id^='anchor']:not(#anchor)"));
     }
 
-    @Step("Получить ячейку в таблице транзакций")
+    /**
+     * Метод для получения ячейки в таблице по индексу
+     * @param rowIndex - индекс строки
+     * @param colIndex - индекс ячейки
+     * @return ячейка
+     */
     public WebElement getTransactionCell(int rowIndex, int colIndex) {
         WebElement row = getRows().get(rowIndex);
         return row.findElements(By.tagName("td")).get(colIndex);
     }
 
-    @Step("Получить ячейку в таблице транзакций с текстом '{text}'")
+    /**
+     * Метод для получения ячейки в таблице транзакций с текстом '{text}'
+     * @param text - текст в ячейке
+     * @return ячейка
+     */
     public List<WebElement> getCellsByText(String text) {
         return driver.findElements(By.xpath(String.format("//td[normalize-space()='%s']", text)));
     }

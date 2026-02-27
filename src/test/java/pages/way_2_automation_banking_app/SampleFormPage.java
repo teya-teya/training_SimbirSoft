@@ -37,6 +37,11 @@ public class SampleFormPage {
     @FindBy(xpath = "//button[text()='Register']")
     public WebElement btnRegister;
 
+    /**
+     * Метод для получения чекбокса с хобби
+     * @param value - хобби
+     * @return чекбокс
+     */
     private WebElement getCheckbox(String value) {
         for (WebElement checkbox : hobbies) {
             if (checkbox.getAttribute("value").equals(value)) {

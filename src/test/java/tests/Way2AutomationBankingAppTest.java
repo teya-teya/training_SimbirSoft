@@ -123,7 +123,7 @@ public class Way2AutomationBankingAppTest extends BaseTest {
 
         webSteps.refreshPage()
                 .clickOnElement(accountPage.btnTransactions, "кнопка 'Transactions'");
-        WaitHelper.waitForVisible(wait, transactionsPage.table, "Таблица транзакций");
+        WaitHelper.waitForVisible(wait, transactionsPage.table);
 
         webChecks.checkTextOnElement(transactionsPage.getTransactionCell(1, 1),
                 "ячейка с данными последней транзакции", String.valueOf(amount));
@@ -154,7 +154,7 @@ public class Way2AutomationBankingAppTest extends BaseTest {
 
         webSteps.refreshPage()
                 .clickOnElement(accountPage.btnTransactions, "кнопка 'Transactions'");
-        WaitHelper.waitForVisible(wait, transactionsPage.table, "Таблица транзакций");
+        WaitHelper.waitForVisible(wait, transactionsPage.table);
 
         webChecks.checkElementNotPresent(transactionsPage.getCellsByText(textAmount),
                 "ячейка со снятием средств", textAmount);
@@ -180,7 +180,7 @@ public class Way2AutomationBankingAppTest extends BaseTest {
 
         webSteps.refreshPage()
                 .clickOnElement(accountPage.btnTransactions, "кнопка 'Transactions'");
-        WaitHelper.waitForVisible(wait, transactionsPage.table, "Таблица транзакций");
+        WaitHelper.waitForVisible(wait, transactionsPage.table);
         transactionsPage.checkBalance(balance);
     }
 
@@ -226,7 +226,7 @@ public class Way2AutomationBankingAppTest extends BaseTest {
         webSteps.refreshPage()
                 .clickOnElement(accountPage.btnTransactions, "кнопка 'Transactions'");
 
-        WaitHelper.waitForVisible(wait, transactionsPage.table, "Таблица транзакций");
+        WaitHelper.waitForVisible(wait, transactionsPage.table);
 
         webSteps.clickOnElement(transactionsPage.btnReset, "кнопка 'Reset'");
         webChecks.checkElementNotPresent(transactionsPage.getRows(), "строки таблицы транзакций", "Credit или Debit");
