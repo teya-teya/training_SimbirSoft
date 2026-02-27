@@ -2,6 +2,7 @@ package pages.way_2_automation_banking_app;
 
 import base.WebChecks;
 import base.WebSteps;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -50,11 +51,13 @@ public class AccountPage {
     @FindBy(xpath = "(//div[@ng-hide=\"noAccount\"]/strong)[2]")
     public WebElement balance;
 
+    @Step("Получить баланс")
     public Integer getBalance() {
         WaitHelper.waitForVisible(wait, balance);
         return Integer.parseInt(balance.getText());
     }
 
+    @Step("Пополнить счет на {amount}")
     public AccountPage deposit(int amount) {
         webSteps.clickOnElement(btnDeposit);
         WaitHelper.waitForVisible(wait, buttonDeposit);
@@ -64,6 +67,7 @@ public class AccountPage {
         return this;
     }
 
+    @Step("Снять со счета {amount}")
     public void withdrawl(String amount) {
         webSteps.clickOnElement(btnWithdrawl);
         WaitHelper.waitForVisible(wait, buttonWithdraw);
@@ -71,17 +75,19 @@ public class AccountPage {
                 .clickOnElement(buttonWithdraw);
     }
 
+    @Step("Проверка отображения сообщения {expectedMessage}")
     public void checkMessage(String expectedMessage) {
         if (expectedMessage == null) {
             webChecks.checkElementNotVisible(locatorMessage, 10);
         } else {
-            webChecks.checkTextOnElement(message, expectedMessage);
+            webChecks.checkTextOnElement(message, "сообщение", expectedMessage);
         }
     }
 
+    @Step("Проверка успешной авторизации пользователя {fullName}")
     public AccountPage checkSuccessLogin(String fullName) {
         WaitHelper.waitForVisible(wait, btnDeposit);
-        webChecks.checkTextOnElement(welcomeMessage, "Welcome %s !!".formatted(fullName));
+        webChecks.checkTextOnElement(welcomeMessage, "сообщение", "Welcome %s !!".formatted(fullName));
 
         return this;
     }

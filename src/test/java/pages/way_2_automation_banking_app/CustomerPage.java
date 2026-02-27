@@ -2,6 +2,7 @@ package pages.way_2_automation_banking_app;
 
 import base.WebChecks;
 import base.WebSteps;
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -29,6 +30,7 @@ public class CustomerPage {
     @FindBy(xpath = "//button[text()='Login']")
     public WebElement btnLogin;
 
+    @Step("Авторизоваться пользователем {fullName}")
     public void login(String fullName) {
         WaitHelper.waitForVisible(wait, dpdUserSelect);
         webSteps.selectOptionByText(dpdUserSelect, fullName)

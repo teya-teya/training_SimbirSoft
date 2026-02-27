@@ -1,6 +1,7 @@
 package pages;
 
 import base.WebSteps;
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -40,6 +41,7 @@ public class AuthorizationPage {
     @FindBy(css = "a[href='#/login']")
     public WebElement btnLogout;
 
+    @Step("Авторизация пользователя")
     public void authorization(String username, String password) {
         webSteps.fillInput(inputUsername, username)
                 .fillInput(inputPassword, password)

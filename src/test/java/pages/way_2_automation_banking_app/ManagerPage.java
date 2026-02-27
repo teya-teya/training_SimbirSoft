@@ -1,6 +1,7 @@
 package pages.way_2_automation_banking_app;
 
 import base.WebSteps;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -50,6 +51,7 @@ public class ManagerPage {
     @FindBy(css = "[placeholder='Search Customer']")
     public WebElement inputSearchCustomer;
 
+    @Step("Добавить покупателя {firstNane} {lastName}")
     public void addCustomer(String firstNane, String lastName, String postCode) {
         WaitHelper.waitForVisible(wait, btnAddCustomerForForm);
 
@@ -61,6 +63,7 @@ public class ManagerPage {
 
     }
 
+    @Step("Создать аккаунт покупателя {fullName}")
     public void openAccount(String fullName, String currency) {
         webSteps.clickOnElement(btnOpenAccount)
                 .selectOptionByText(dpdUserSelect, fullName)
@@ -69,12 +72,14 @@ public class ManagerPage {
                 .clickOkInAlert();
     }
 
+    @Step("Создать аккаунт покупателя {fullName}")
     public void createCustomerWithAccount(String firstNane, String lastName, String postCode, String currency) {
         webSteps.goToPage(ADD_CUSTOMER.getUrl());
         addCustomer(firstNane, lastName, postCode);
         openAccount(firstNane + " " + lastName, currency);
     }
 
+    @Step("Удалить покупателя {firstName}")
     public void deleteCustomerByFirstName(String firstName) {
         WebElement deleteBtn = driver.findElement(By.xpath(
                 "//table//tbody/tr[td[1][text()='" + firstName + "']]//button[text()='Delete']"
@@ -83,10 +88,11 @@ public class ManagerPage {
         webSteps.clickOnElement(deleteBtn);
     }
 
-    public List<WebElement> getRows() {
+    private List<WebElement> getRows() {
         return driver.findElements(By.cssSelector("table tbody tr"));
     }
 
+    @Step("Проверка поиска покупателя по имени {name}")
     public ManagerPage checkSearch(String name) {
         List<WebElement> rows = getRows();
         Assert.assertEquals(rows.size(), 1, "Ожидалось ровно одна строка после поиска");
@@ -97,7 +103,8 @@ public class ManagerPage {
         return this;
     }
 
-    public void assertNameNotPresent(String name) {
+    @Step("Проверить что в списке покупателей нет покупателя по имени {name}")
+    public void checkNameNotPresent(String name) {
         List<WebElement> rows = getRows();
 
         for (WebElement row : rows) {

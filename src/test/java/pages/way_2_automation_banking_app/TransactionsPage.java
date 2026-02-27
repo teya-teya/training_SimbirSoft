@@ -1,6 +1,7 @@
 package pages.way_2_automation_banking_app;
 
 import base.WebSteps;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -33,19 +34,23 @@ public class TransactionsPage {
     @FindBy(css = "[ng-click='back()']")
     public WebElement btnBack;
 
+    @Step("Получить строки в таблице транзакций")
     public List<WebElement> getRows() {
         return driver.findElements(By.cssSelector("[id^='anchor']:not(#anchor)"));
     }
 
+    @Step("Получить ячейку в таблице транзакций")
     public WebElement getTransactionCell(int rowIndex, int colIndex) {
         WebElement row = getRows().get(rowIndex);
         return row.findElements(By.tagName("td")).get(colIndex);
     }
 
+    @Step("Получить ячейку в таблице транзакций с текстом '{text}'")
     public List<WebElement> getCellsByText(String text) {
         return driver.findElements(By.xpath(String.format("//td[normalize-space()='%s']", text)));
     }
 
+    @Step("Проверить баланс")
     public void checkBalance(int balance) {
         List<WebElement> rows = getRows();
         WaitHelper.waitForElementsVisible(wait, rows);

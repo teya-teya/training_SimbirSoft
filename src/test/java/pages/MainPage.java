@@ -5,6 +5,7 @@ import base.WebSteps;
 import components.Banner;
 import components.Footer;
 import components.Header;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -48,6 +49,7 @@ public class MainPage {
 
     public By locatorLearnMore = By.xpath("//div[contains(@class, 'swiper-slide-active')]//a[text()='Learn More']");
 
+    @Step("Кликнуть на кнопку 'Read More' курса '{courseName}'")
     public WebElement getReadMoreButtonByCourseText(String courseName) {
         for (WebElement course : courses) {
             if (course.getText().contains(courseName)) {
@@ -57,6 +59,7 @@ public class MainPage {
         return null;
     }
 
+    @Step("Закрыть баннер")
     public void closeBanner() {
         if (webChecks.isPresent(banner.bannerLocator)) {
             webSteps.clickOnElement(banner.btnX);

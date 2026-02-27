@@ -1,6 +1,7 @@
 package pages.way_2_automation_banking_app;
 
 import base.WebSteps;
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -36,7 +37,7 @@ public class SampleFormPage {
     @FindBy(xpath = "//button[text()='Register']")
     public WebElement btnRegister;
 
-    public WebElement getCheckbox(String value) {
+    private WebElement getCheckbox(String value) {
         for (WebElement checkbox : hobbies) {
             if (checkbox.getAttribute("value").equals(value)) {
                 return checkbox;
@@ -45,6 +46,7 @@ public class SampleFormPage {
         return null;
     }
 
+    @Step("Заполнить форму регистрации Sample Form и нажать кнопку 'Register'")
     public void fillSampleFormForUser(String firstName, String lastName, String email,
                                                 String password, String gender, String hobby, String infoAbout) {
         webSteps.fillInput(webSteps.getInput("First Name"), firstName)

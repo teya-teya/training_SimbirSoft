@@ -1,5 +1,6 @@
 package components;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -19,6 +20,7 @@ public class Header {
     @FindBy(xpath = "(//div[@data-section='section-primary-header-builder']//div[contains(@class,'ast-builder-grid-row')])[1]")
     public WebElement navBar;
 
+    @Step("Получить ссылку социальной сети {socialPage}")
     public WebElement getLinkSocialsPage(String socialPage) {
         return linksSocialPage.stream()
                 .filter(link -> socialPage.equals(link.getAttribute("aria-label")))
