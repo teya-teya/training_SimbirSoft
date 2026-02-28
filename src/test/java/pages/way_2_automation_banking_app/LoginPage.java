@@ -40,9 +40,7 @@ public class LoginPage {
     }
 
     @Step("Нажать кнопку 'Customer Login'")
-    public LoginPage clickBtnCustomerLogin() {
+    public void clickBtnCustomerLogin() {
         webSteps.clickOnElement(btnCustomerLogin);
-
-        return this;
     }
 }
