@@ -68,27 +68,41 @@ public class AccountPage {
     }
 
     @Step("Снять со счета {amount}")
-    public void withdrawl(String amount) {
+    public AccountPage withdrawl(String amount) {
         webSteps.clickOnElement(btnWithdrawl);
         WaitHelper.waitForVisible(wait, buttonWithdraw);
         webSteps.fillInput(webSteps.getInput("Amount to be Withdrawn"), amount)
                 .clickOnElement(buttonWithdraw);
+
+        return this;
     }
 
-    @Step("Проверка отображения сообщения {expectedMessage}")
-    public void checkMessage(String expectedMessage) {
+    @Step("Проверить отображение сообщения {expectedMessage}")
+    public AccountPage checkMessage(String expectedMessage) {
         if (expectedMessage == null) {
             webChecks.checkElementNotVisible(locatorMessage, 10);
         } else {
-            webChecks.checkTextOnElement(message, "сообщение", expectedMessage);
+            webChecks.checkTextOnElement(message, expectedMessage);
         }
-    }
-
-    @Step("Проверка успешной авторизации пользователя {fullName}")
-    public AccountPage checkSuccessLogin(String fullName) {
-        WaitHelper.waitForVisible(wait, btnDeposit);
-        webChecks.checkTextOnElement(welcomeMessage, "сообщение", "Welcome %s !!".formatted(fullName));
 
         return this;
+    }
+
+    @Step("Проверить успешную авторизацию пользователя {fullName}")
+    public AccountPage checkSuccessLogin(String fullName) {
+        WaitHelper.waitForVisible(wait, btnDeposit);
+        webChecks.checkTextOnElement(welcomeMessage, "Welcome %s !!".formatted(fullName));
+
+        return this;
+    }
+
+    @Step("Нажать кнопку 'Transactions'")
+    public void clickBtnTransactions() {
+        webSteps.clickOnElement(btnTransactions);
+    }
+
+    @Step("Проверить, что баланс равен {amount}")
+    public void checkBalance(String amount) {
+        webChecks.checkTextOnElement(balance, amount);
     }
 }

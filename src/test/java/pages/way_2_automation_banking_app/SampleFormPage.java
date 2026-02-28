@@ -1,5 +1,6 @@
 package pages.way_2_automation_banking_app;
 
+import base.WebChecks;
 import base.WebSteps;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
@@ -14,11 +15,13 @@ public class SampleFormPage {
     public WebDriver driver;
     public WebDriverWait wait;
     public WebSteps webSteps;
+    WebChecks webChecks;
 
     public SampleFormPage(WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
         this.wait = wait;
         this.webSteps = new WebSteps(driver, wait);
+        this.webChecks = new WebChecks(driver, wait);
         PageFactory.initElements(driver, this);
     }
 
@@ -52,7 +55,7 @@ public class SampleFormPage {
     }
 
     @Step("Заполнить форму регистрации Sample Form и нажать кнопку 'Register'")
-    public void fillSampleFormForUser(String firstName, String lastName, String email,
+    public SampleFormPage fillSampleFormForUser(String firstName, String lastName, String email,
                                                 String password, String gender, String hobby, String infoAbout) {
         webSteps.fillInput(webSteps.getInput("First Name"), firstName)
                 .fillInput(webSteps.getInput("Last Name"), lastName)
@@ -62,5 +65,12 @@ public class SampleFormPage {
                 .clickOnElement(getCheckbox(hobby))
                 .fillInput(about, infoAbout)
                 .clickOnElement(btnRegister);
+
+        return this;
+    }
+
+    @Step("Проверить, что сообщение 'User registered successfully!' отображается сообщение")
+    public void checkMessage() {
+        webChecks.checkTextOnElement(successMessage, "User registered successfully!");
     }
 }

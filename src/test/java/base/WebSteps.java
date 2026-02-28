@@ -26,20 +26,10 @@ public class WebSteps {
     }
 
     @Step("Перейти на страницу {url}")
-    public WebSteps goToPage(String url) {
+    public void goToPage(String url) {
         driver.navigate().to(ConfigReader.getProperty("base.url") + url);
-
-        return this;
     }
 
-    @Step("Кликнуть на элемент '{description}'")
-    public WebSteps clickOnElement(WebElement element, String description) {
-        clickOnElement(element);
-
-        return this;
-    }
-
-    @Step("Кликнуть на элемент")
     public WebSteps clickOnElement(WebElement element) {
         WaitHelper.waitForClickable(wait, element);
         actions.moveToElement(element).click().perform();
@@ -47,13 +37,11 @@ public class WebSteps {
         return this;
     }
 
-    @Step("Проскролить к элементу '{description}'")
-    public void scrollToElement(WebElement element, String description) {
+    public void scrollToElement(WebElement element) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
     }
 
-    @Step("Выбрать опцию в дропдауне")
     public WebSteps selectOptionByText(WebElement dpd, String option) {
         clickOnElement(dpd);
         Select select = new Select(dpd);
@@ -71,7 +59,6 @@ public class WebSteps {
         return driver.findElement(By.xpath("//label[contains(text(),'%s')]/following-sibling::input".formatted(label)));
     }
 
-    @Step("Заполнить поле значением '{value}'")
     public WebSteps fillInput(WebElement input, String value) {
         WaitHelper.waitForVisible(wait, input);
         input.clear();
@@ -80,12 +67,6 @@ public class WebSteps {
         return this;
     }
 
-    @Step("Заполнить поле {description} значением '{value}'")
-    public void fillInput(WebElement input, String value, String description) {
-        fillInput(input, value);
-    }
-
-    @Step("Очистить поле")
     public void cleanInput(WebElement input) {
         WaitHelper.waitForVisible(wait, input);
         input.clear();
@@ -103,17 +84,14 @@ public class WebSteps {
     public void clickOkInAlert() {
         Alert alert = wait.until(ExpectedConditions.alertIsPresent());
         alert.accept();
-
     }
 
     @Step("Обновить страницу")
-    public WebSteps refreshPage() {
+    public void refreshPage() {
         driver.navigate().refresh();
-
-        return this;
     }
 
-    public void waitElementNotVisible(By locator, WebElement element, String description) {
+    public void waitElementNotVisible(By locator, WebElement element) {
         if (webChecks.isPresent(locator)) {
             WaitHelper.waitForNotVisible(wait, element);
         }

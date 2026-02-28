@@ -1,5 +1,6 @@
 package pages.way_2_automation_banking_app;
 
+import base.WebChecks;
 import base.WebSteps;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
@@ -17,11 +18,13 @@ public class TransactionsPage {
     public WebDriver driver;
     public WebDriverWait wait;
     public WebSteps webSteps;
+    public WebChecks webChecks;
 
     public TransactionsPage(WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
         this.wait = wait;
         this.webSteps = new WebSteps(driver, wait);
+        this.webChecks = new WebChecks(driver, wait);
         PageFactory.initElements(driver, this);
     }
 
@@ -36,6 +39,7 @@ public class TransactionsPage {
 
     /**
      * Метод для получения строк в таблице (исключая первую) в таблице транзакций
+     *
      * @return строки
      */
     public List<WebElement> getRows() {
@@ -44,6 +48,7 @@ public class TransactionsPage {
 
     /**
      * Метод для получения ячейки в таблице по индексу
+     *
      * @param rowIndex - индекс строки
      * @param colIndex - индекс ячейки
      * @return ячейка
@@ -55,6 +60,7 @@ public class TransactionsPage {
 
     /**
      * Метод для получения ячейки в таблице транзакций с текстом '{text}'
+     *
      * @param text - текст в ячейке
      * @return ячейка
      */
@@ -84,5 +90,35 @@ public class TransactionsPage {
 
         Assert.assertEquals(calculatedBalance, balance,
                 "Баланс не совпадает! Ожидалось: " + balance + ", рассчитано: " + calculatedBalance);
+    }
+
+    @Step("Проверить, что ячейка содержит {text}")
+    public void checkTextInCell(WebElement cell, String text) {
+        webChecks.checkTextOnElement(cell, text);
+    }
+
+    @Step("Проверить, что ячейка с текстом {textAmount} не отображается")
+    public void checkCellNotPresent(List<WebElement> cells, String textAmount) {
+        webChecks.checkElementNotPresent(cells, textAmount);
+    }
+
+    @Step("Нажать кнопку 'Reset'")
+    public TransactionsPage clickBtnReset() {
+        webSteps.clickOnElement(btnReset);
+
+        return this;
+    }
+
+    @Step("Нажать кнопку 'Back'")
+    public void clickBtnBack() {
+        webSteps.clickOnElement(btnBack);
+
+    }
+
+    @Step("Проверить, что в таблице транзакций пустая")
+    public TransactionsPage checkTransactionsEmpty() {
+        webChecks.checkElementNotPresent(getRows(), "Credit или Debit");
+
+        return this;
     }
 }

@@ -73,19 +73,23 @@ public class ManagerPage {
     }
 
     @Step("Создать аккаунт покупателя {fullName}")
-    public void createCustomerWithAccount(String firstNane, String lastName, String postCode, String currency) {
+    public ManagerPage createCustomerWithAccount(String firstNane, String lastName, String postCode, String currency) {
         webSteps.goToPage(ADD_CUSTOMER.getUrl());
         addCustomer(firstNane, lastName, postCode);
         openAccount(firstNane + " " + lastName, currency);
+
+        return this;
     }
 
     @Step("Удалить покупателя {firstName}")
-    public void deleteCustomerByFirstName(String firstName) {
+    public ManagerPage deleteCustomerByFirstName(String firstName) {
         WebElement deleteBtn = driver.findElement(By.xpath(
                 "//table//tbody/tr[td[1][text()='" + firstName + "']]//button[text()='Delete']"
         ));
 
         webSteps.clickOnElement(deleteBtn);
+
+        return this;
     }
 
     /**
@@ -96,7 +100,35 @@ public class ManagerPage {
         return driver.findElements(By.cssSelector("table tbody tr"));
     }
 
-    @Step("Проверка поиска покупателя по имени {name}")
+    @Step("Нажать кнопку 'Add Customer'")
+    public ManagerPage clickBtnAddCustomer() {
+        webSteps.clickOnElement(btnAddCustomer);
+
+        return this;
+    }
+
+    @Step("Нажать кнопку 'Customers'")
+    public ManagerPage clickBtnCustomer() {
+        webSteps.clickOnElement(btnCustomers);
+
+        return this;
+    }
+
+    @Step("Очистить поле поиска покупателей")
+    public ManagerPage cleanInputSearchCustomer() {
+        webSteps.cleanInput(inputSearchCustomer);
+
+        return this;
+    }
+
+    @Step("Заполнить поле поиска покупателей текстом {text}")
+    public ManagerPage fillInputSearchCustomer(String text) {
+        webSteps.fillInput(inputSearchCustomer, text);
+
+        return this;
+    }
+
+    @Step("Проверить поиск покупателя по имени {name}")
     public ManagerPage checkSearch(String name) {
         List<WebElement> rows = getRows();
         Assert.assertEquals(rows.size(), 1, "Ожидалось ровно одна строка после поиска");
@@ -107,7 +139,7 @@ public class ManagerPage {
         return this;
     }
 
-    @Step("Проверить что в списке покупателей нет покупателя по имени {name}")
+    @Step("Проверить, что в списке нет покупателя по имени {name}")
     public void checkNameNotPresent(String name) {
         List<WebElement> rows = getRows();
 

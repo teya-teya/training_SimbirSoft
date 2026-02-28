@@ -30,35 +30,33 @@ public class AuthorizationTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     @Test(description = "Проверка полей ввода")
     void checkLoginInputFields() {
-        webChecks.checkElementVisible(authorizationPage.inputUsername, "поле 'Username'")
-                .checkElementVisible(authorizationPage.inputPassword, "поле 'Password'")
-                .checkElementDisable(authorizationPage.btnLogin, "кнопка 'Login'");
+        authorizationPage.checkInputs()
+                .checkBtnLoginDeactivate();
     }
 
     @Story("Авторизация пользователя с корректными данными")
     @Severity(SeverityLevel.BLOCKER)
     @Test(description = "Проверка успешной авторизации")
     void checkSuccessfulAuthorization() {
-        authorizationPage.authorization(System.getenv("USERNAME"), System.getenv("PASSWORD"));
-        webChecks.checkTextOnElement(authorizationPage.messageSuccess, "сообщение","You're logged in!!");
+        authorizationPage.authorization(System.getenv("USERNAME"), System.getenv("PASSWORD"))
+                .checkMessageAfterAuthorization(true);
     }
 
     @Story("Авторизация пользователя с не корректными данными")
     @Severity(SeverityLevel.CRITICAL)
     @Test(description = "Проверка авторизации с невалидными данными")
     void checkAuthorizationWithInvalidCredentials() {
-        authorizationPage.authorization(RandomUtils.username(), RandomUtils.password());
-        webChecks.checkTextOnElement(authorizationPage.messageError, "сообщение","Username or password is incorrect");
+        authorizationPage.authorization(RandomUtils.username(), RandomUtils.password())
+                .checkMessageAfterAuthorization(false);
     }
 
     @Story("Успешный выход пользователя после авторизации")
     @Severity(SeverityLevel.CRITICAL)
     @Test(description = "Проверка успешного разлогирования")
     void checkSuccessfulLogoutAfterAuthorization() {
-        authorizationPage.authorization(System.getenv("USERNAME"), System.getenv("PASSWORD"));
-        webChecks.checkTextOnElement(authorizationPage.messageSuccess, "сообщение","You're logged in!!");
-        webSteps.clickOnElement(authorizationPage.btnLogout, "кнопка 'Logout'");
-        webChecks.checkElementVisible(authorizationPage.inputUsername, "поле 'Username'")
-                .checkElementVisible(authorizationPage.inputPassword, "поле 'Password'");
+        authorizationPage.authorization(System.getenv("USERNAME"), System.getenv("PASSWORD"))
+                .checkMessageAfterAuthorization(true)
+                .clickLogout()
+                .checkInputs();
     }
 }
