@@ -1,5 +1,6 @@
 package base;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -24,10 +25,9 @@ public class WebSteps {
         this.webChecks = new WebChecks(driver, wait);
     }
 
-    public WebSteps goToPage(String url) {
+    @Step("Перейти на страницу {url}")
+    public void goToPage(String url) {
         driver.navigate().to(ConfigReader.getProperty("base.url") + url);
-
-        return this;
     }
 
     public WebSteps clickOnElement(WebElement element) {
@@ -50,6 +50,11 @@ public class WebSteps {
         return this;
     }
 
+    /**
+     * Метод для получения полей по заголовку на ним
+     * @param label - текст заголовка над полем
+     * @return поле
+     */
     public WebElement getInput(String label) {
         return driver.findElement(By.xpath("//label[contains(text(),'%s')]/following-sibling::input".formatted(label)));
     }
@@ -67,6 +72,7 @@ public class WebSteps {
         input.clear();
     }
 
+    @Step("Получить самое длинное слово из коллекции")
     public String getLongestValue(List<WebElement> elements) {
         return elements.stream()
                 .map(el -> el.getAttribute("value"))
@@ -74,16 +80,15 @@ public class WebSteps {
                 .orElse("");
     }
 
+    @Step("Нажать кнопку 'Ок' в браузерном уведомлении")
     public void clickOkInAlert() {
         Alert alert = wait.until(ExpectedConditions.alertIsPresent());
         alert.accept();
-
     }
 
-    public WebSteps refreshPage() {
+    @Step("Обновить страницу")
+    public void refreshPage() {
         driver.navigate().refresh();
-
-        return this;
     }
 
     public void waitElementNotVisible(By locator, WebElement element) {

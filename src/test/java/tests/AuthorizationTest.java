@@ -3,11 +3,14 @@ package tests;
 import base.WebChecks;
 import base.WebSteps;
 import enums.URL;
+import io.qameta.allure.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.AuthorizationPage;
 import utils.RandomUtils;
 
+@Epic("UI тесты")
+@Feature("Авторизация")
 @Test(description = "Проверка авторизации")
 public class AuthorizationTest extends BaseTest {
     WebChecks webChecks;
@@ -23,31 +26,37 @@ public class AuthorizationTest extends BaseTest {
         webSteps.goToPage(URL.AUTHORIZATION.getUrl());
     }
 
+    @Story("Проверка видимости полей ввода на странице авторизации")
+    @Severity(SeverityLevel.NORMAL)
     @Test(description = "Проверка полей ввода")
     void checkLoginInputFields() {
-        webChecks.checkElementVisible(authorizationPage.inputUsername)
-                .checkElementVisible(authorizationPage.inputPassword)
-                .checkElementDisable(authorizationPage.btnLogin);
+        authorizationPage.checkInputs()
+                .checkBtnLoginDeactivate();
     }
 
+    @Story("Авторизация пользователя с корректными данными")
+    @Severity(SeverityLevel.BLOCKER)
     @Test(description = "Проверка успешной авторизации")
     void checkSuccessfulAuthorization() {
-        authorizationPage.authorization(System.getenv("USERNAME"), System.getenv("PASSWORD"));
-        webChecks.checkTextOnElement(authorizationPage.messageSuccess, "You're logged in!!");
+        authorizationPage.authorization(System.getenv("USERNAME"), System.getenv("PASSWORD"))
+                .checkMessageAfterAuthorization(true);
     }
 
+    @Story("Авторизация пользователя с не корректными данными")
+    @Severity(SeverityLevel.CRITICAL)
     @Test(description = "Проверка авторизации с невалидными данными")
     void checkAuthorizationWithInvalidCredentials() {
-        authorizationPage.authorization(RandomUtils.username(), RandomUtils.password());
-        webChecks.checkTextOnElement(authorizationPage.messageError, "Username or password is incorrect");
+        authorizationPage.authorization(RandomUtils.username(), RandomUtils.password())
+                .checkMessageAfterAuthorization(false);
     }
 
+    @Story("Успешный выход пользователя после авторизации")
+    @Severity(SeverityLevel.CRITICAL)
     @Test(description = "Проверка успешного разлогирования")
     void checkSuccessfulLogoutAfterAuthorization() {
-        authorizationPage.authorization(System.getenv("USERNAME"), System.getenv("PASSWORD"));
-        webChecks.checkTextOnElement(authorizationPage.messageSuccess, "You're logged in!!");
-        webSteps.clickOnElement(authorizationPage.btnLogout);
-        webChecks.checkElementVisible(authorizationPage.inputUsername)
-                .checkElementVisible(authorizationPage.inputPassword);
+        authorizationPage.authorization(System.getenv("USERNAME"), System.getenv("PASSWORD"))
+                .checkMessageAfterAuthorization(true)
+                .clickLogout()
+                .checkInputs();
     }
 }

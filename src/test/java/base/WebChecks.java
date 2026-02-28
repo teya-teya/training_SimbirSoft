@@ -1,6 +1,7 @@
 package base;
 
 import enums.URL;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -45,7 +46,7 @@ public class WebChecks {
         Assert.assertTrue(elements.isEmpty(), "Элемент с текстом '" + text + "' отображается");
     }
 
-    public WebChecks checkElementsVisible(List<WebElement> elements) {
+    public void checkElementsVisible(List<WebElement> elements) {
         if (elements.isEmpty()) {
             Assert.fail("Список элементов пустой");
         }
@@ -54,9 +55,7 @@ public class WebChecks {
             Assert.assertTrue(elem.isDisplayed(), "Элемент не отображается");
         }
 
-        return this;
     }
-
 
     public WebChecks checkTextOnElement(WebElement element, String expectedText) {
         wait.until(ExpectedConditions.visibilityOf(element));
@@ -68,7 +67,7 @@ public class WebChecks {
         return this;
     }
 
-    public WebChecks checkTextOnElementCollection(List<WebElement> elements, List<String> expectedTexts) {
+    public void checkTextOnElementCollection(List<WebElement> elements, List<String> expectedTexts) {
         if (elements.isEmpty()) {
             Assert.fail("Список элементов пустой");
         }
@@ -80,9 +79,9 @@ public class WebChecks {
                     "Элемент содержит: '" + actualText + "', а не ожидаемый текст: '" + expectedTexts.get(i) + "'");
         }
 
-        return this;
     }
 
+    @Step("Проверить переход на страницу'{url}'")
     public void checkNavigateTo(URL url) {
         String currentUrl = driver.getCurrentUrl();
         Assert.assertEquals(currentUrl, ConfigReader.getProperty("base.url") + url.getUrl(),

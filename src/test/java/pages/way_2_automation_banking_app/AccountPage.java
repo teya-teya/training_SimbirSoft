@@ -2,6 +2,7 @@ package pages.way_2_automation_banking_app;
 
 import base.WebChecks;
 import base.WebSteps;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -50,11 +51,13 @@ public class AccountPage {
     @FindBy(xpath = "(//div[@ng-hide=\"noAccount\"]/strong)[2]")
     public WebElement balance;
 
+    @Step("Получить баланс")
     public Integer getBalance() {
         WaitHelper.waitForVisible(wait, balance);
         return Integer.parseInt(balance.getText());
     }
 
+    @Step("Пополнить счет на {amount}")
     public AccountPage deposit(int amount) {
         webSteps.clickOnElement(btnDeposit);
         WaitHelper.waitForVisible(wait, buttonDeposit);
@@ -64,25 +67,42 @@ public class AccountPage {
         return this;
     }
 
-    public void withdrawl(String amount) {
+    @Step("Снять со счета {amount}")
+    public AccountPage withdrawl(String amount) {
         webSteps.clickOnElement(btnWithdrawl);
         WaitHelper.waitForVisible(wait, buttonWithdraw);
         webSteps.fillInput(webSteps.getInput("Amount to be Withdrawn"), amount)
                 .clickOnElement(buttonWithdraw);
+
+        return this;
     }
 
-    public void checkMessage(String expectedMessage) {
+    @Step("Проверить отображение сообщения {expectedMessage}")
+    public AccountPage checkMessage(String expectedMessage) {
         if (expectedMessage == null) {
             webChecks.checkElementNotVisible(locatorMessage, 10);
         } else {
             webChecks.checkTextOnElement(message, expectedMessage);
         }
+
+        return this;
     }
 
+    @Step("Проверить успешную авторизацию пользователя {fullName}")
     public AccountPage checkSuccessLogin(String fullName) {
         WaitHelper.waitForVisible(wait, btnDeposit);
         webChecks.checkTextOnElement(welcomeMessage, "Welcome %s !!".formatted(fullName));
 
         return this;
+    }
+
+    @Step("Нажать кнопку 'Transactions'")
+    public void clickBtnTransactions() {
+        webSteps.clickOnElement(btnTransactions);
+    }
+
+    @Step("Проверить, что баланс равен {amount}")
+    public void checkBalance(String amount) {
+        webChecks.checkTextOnElement(balance, amount);
     }
 }

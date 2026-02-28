@@ -1,6 +1,8 @@
 package pages;
 
+import base.WebChecks;
 import base.WebSteps;
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,11 +13,13 @@ public class AuthorizationPage {
     public WebDriver driver;
     public WebDriverWait wait;
     public WebSteps webSteps;
+    public WebChecks webChecks;
 
     public AuthorizationPage(WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
         this.wait = wait;
         this.webSteps = new WebSteps(driver, wait);
+        this.webChecks = new WebChecks(driver, wait);
         PageFactory.initElements(driver, this);
     }
 
@@ -40,10 +44,45 @@ public class AuthorizationPage {
     @FindBy(css = "a[href='#/login']")
     public WebElement btnLogout;
 
-    public void authorization(String username, String password) {
+    @Step("Авторизация пользователя")
+    public AuthorizationPage authorization(String username, String password) {
         webSteps.fillInput(inputUsername, username)
                 .fillInput(inputPassword, password)
                 .fillInput(inputUsernameDescription, username)
                 .clickOnElement(btnLogin);
+
+        return this;
     }
+
+    @Step("Проверить отображения сообщения после авторизации")
+    public AuthorizationPage checkMessageAfterAuthorization(boolean successAuthorization) {
+        if (successAuthorization) {
+            webChecks.checkTextOnElement(messageSuccess, "You're logged in!!");
+        } else {
+            webChecks.checkTextOnElement(messageError, "Username or password is incorrect");
+        }
+
+        return this;
+    }
+
+    @Step("Нажать на кнопку 'Logout'")
+    public AuthorizationPage clickLogout() {
+        webSteps.clickOnElement(btnLogout);
+
+        return this;
+    }
+
+    @Step("Проверить отображение полей 'Username' и 'Password'")
+    public AuthorizationPage checkInputs() {
+        webChecks.checkElementVisible(inputUsername)
+                .checkElementVisible(inputPassword);
+
+        return this;
+    }
+
+    @Step("Проверить, что кнопка неактивна")
+    public void checkBtnLoginDeactivate() {
+        webChecks.checkElementDisable(btnLogin);
+    }
+
 }
