@@ -10,6 +10,7 @@ import utils.ConfigReader;
 
 import java.time.Duration;
 
+//@Listeners({AllureTestNg.class})
 public class BaseTest {
     protected WebDriver driver;
     protected WebDriverWait wait;
