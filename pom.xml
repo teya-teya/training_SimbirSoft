@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -13,12 +13,24 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <selenium.version>4.18.1</selenium.version>
         <testng.version>7.9.0</testng.version>
+        <allure.version>2.24.0</allure.version>
+        <aspectj.version>1.9.21</aspectj.version>
     </properties>
 
-    <dependencies>
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <url>https://repo1.maven.org/maven2/</url>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+    </repositories>
 
+    <dependencies>
         <!-- Selenium -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
@@ -34,11 +46,18 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Allure -->
+        <!-- Allure TestNG -->
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-testng</artifactId>
-            <version>2.24.0</version>
+            <version>${allure.version}</version>
+        </dependency>
+
+        <!-- AspectJ Weaver (нужно для @Step) -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
         </dependency>
 
         <!-- Faker -->
@@ -47,13 +66,10 @@
             <artifactId>datafaker</artifactId>
             <version>2.0.2</version>
         </dependency>
-
-
     </dependencies>
 
     <build>
         <plugins>
-
             <!-- Компилятор -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -65,20 +81,26 @@
                 </configuration>
             </plugin>
 
-            <!-- Запуск тестов -->
+            <!-- Surefire для запуска тестов -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
+                <configuration>
+                    <testFailureIgnore>false</testFailureIgnore>
+                    <argLine>-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"</argLine>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                </configuration>
             </plugin>
 
+            <!-- Allure Maven Plugin -->
             <plugin>
                 <groupId>io.qameta.allure</groupId>
                 <artifactId>allure-maven</artifactId>
                 <version>2.12.0</version>
             </plugin>
-
         </plugins>
     </build>
-
 </project>

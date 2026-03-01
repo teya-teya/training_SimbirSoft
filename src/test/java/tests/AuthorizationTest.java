@@ -5,6 +5,7 @@ import base.WebSteps;
 import enums.URL;
 import io.qameta.allure.*;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import pages.AuthorizationPage;
 import utils.RandomUtils;
@@ -34,20 +35,20 @@ public class AuthorizationTest extends BaseTest {
                 .checkBtnLoginDeactivate();
     }
 
-    @Story("Авторизация пользователя с корректными данными")
-    @Severity(SeverityLevel.BLOCKER)
-    @Test(description = "Проверка успешной авторизации")
-    void checkSuccessfulAuthorization() {
-        authorizationPage.authorization(System.getenv("USERNAME"), System.getenv("PASSWORD"))
-                .checkMessageAfterAuthorization(true);
+    @DataProvider(name = "authorizationData")
+    public Object[][] authorizationData() {
+        return new Object[][]{
+                {System.getenv("USERNAME"), System.getenv("PASSWORD"), true},
+                {RandomUtils.username(), RandomUtils.password(), false}
+        };
     }
 
-    @Story("Авторизация пользователя с не корректными данными")
-    @Severity(SeverityLevel.CRITICAL)
-    @Test(description = "Проверка авторизации с невалидными данными")
-    void checkAuthorizationWithInvalidCredentials() {
-        authorizationPage.authorization(RandomUtils.username(), RandomUtils.password())
-                .checkMessageAfterAuthorization(false);
+    @Story("Авторизация пользователя")
+    @Severity(SeverityLevel.BLOCKER)
+    @Test(description = "Проверка авторизации пользователя", dataProvider = "authorizationData")
+    void checkAuthorization(String username, String password, boolean success) {
+        authorizationPage.authorization(username, password)
+                .checkMessageAfterAuthorization(success);
     }
 
     @Story("Успешный выход пользователя после авторизации")

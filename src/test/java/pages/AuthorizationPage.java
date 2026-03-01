@@ -2,6 +2,7 @@ package pages;
 
 import base.WebChecks;
 import base.WebSteps;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -54,14 +55,16 @@ public class AuthorizationPage {
         return this;
     }
 
-    @Step("Проверить отображения сообщения после авторизации")
     public AuthorizationPage checkMessageAfterAuthorization(boolean successAuthorization) {
         if (successAuthorization) {
-            webChecks.checkTextOnElement(messageSuccess, "You're logged in!!");
+            Allure.step("Проверка отображения сообщения об успешной авторизации", () -> {
+                webChecks.checkTextOnElement(messageSuccess, "You're logged in!!");
+            });
         } else {
-            webChecks.checkTextOnElement(messageError, "Username or password is incorrect");
+            Allure.step("Проверка отображения сообщения об ошибке авторизации", () -> {
+                webChecks.checkTextOnElement(messageError, "Username or password is incorrect");
+            });
         }
-
         return this;
     }
 
@@ -80,7 +83,7 @@ public class AuthorizationPage {
         return this;
     }
 
-    @Step("Проверить, что кнопка неактивна")
+    @Step("Проверить, что кнопка 'Login' неактивна")
     public void checkBtnLoginDeactivate() {
         webChecks.checkElementDisable(btnLogin);
     }
