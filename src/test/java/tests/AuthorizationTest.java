@@ -35,6 +35,22 @@ public class AuthorizationTest extends BaseTest {
                 .checkBtnLoginDeactivate();
     }
 
+    @DataProvider(name = "dataForFail")
+    public Object[][] dataForFail() {
+        return new Object[][]{
+                {System.getenv("USERNAME"), System.getenv("PASSWORD"), false},
+                {RandomUtils.username(), RandomUtils.password(), true}
+        };
+    }
+
+    @Story("Проверка видимости полей ввода на странице авторизации")
+    @Severity(SeverityLevel.MINOR)
+    @Test(description = "Проверка работы скриншотов при падении", dataProvider = "dataForFail")
+    void checkScreenshot(String username, String password, boolean success) {
+        authorizationPage.authorization(username, password)
+                .checkMessageAfterAuthorization(success);
+    }
+
     @DataProvider(name = "authorizationData")
     public Object[][] authorizationData() {
         return new Object[][]{
