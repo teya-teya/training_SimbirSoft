@@ -81,10 +81,17 @@ public class WebChecks {
 
     }
 
-    @Step("Проверить переход на страницу'{url}'")
+    @Step("Проверить переход на страницу '{url}'")
     public void checkNavigateTo(URL url) {
         String currentUrl = driver.getCurrentUrl();
         Assert.assertEquals(currentUrl, ConfigReader.getProperty("base.url") + url.getUrl(),
+                " Перехода на " + url.getDescription() + "не произошло, открыта страница " + currentUrl);
+    }
+
+    @Step("Проверить переход на страницу '{url}'")
+    public void checkNavigate(URL url) {
+        String currentUrl = driver.getCurrentUrl();
+        Assert.assertEquals(currentUrl, url.getUrl(),
                 " Перехода на " + url.getDescription() + "не произошло, открыта страница " + currentUrl);
     }
 
