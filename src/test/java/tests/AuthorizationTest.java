@@ -45,7 +45,7 @@ public class AuthorizationTest extends BaseTest {
 
     @Story("Проверка видимости полей ввода на странице авторизации")
     @Severity(SeverityLevel.MINOR)
-    @Test(description = "Проверка работы скриншотов при падении")
+    @Test(description = "Проверка работы скриншотов при падении", dataProvider = "dataForFail")
     void checkScreenshot(String username, String password, boolean success) {
         authorizationPage.authorization(username, password)
                 .checkMessageAfterAuthorization(success);
