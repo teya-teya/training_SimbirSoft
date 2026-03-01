@@ -25,7 +25,7 @@ public class TestListener implements ITestListener {
         }
     }
 
-    @Attachment(value = "Screenshot on Failure", type = "image/png")
+    @Attachment(value = "Скриншот при падении", type = "image/png")
     public byte[] saveScreenshot(WebDriver driver) {
         Screenshot screenshot = new AShot().takeScreenshot(driver);
 
