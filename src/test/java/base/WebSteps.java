@@ -30,6 +30,11 @@ public class WebSteps {
         driver.navigate().to(ConfigReader.getProperty("base.url") + url);
     }
 
+    @Step("Перейти на страницу {url}")
+    public void goToPageFullLink(String url) {
+        driver.navigate().to(url);
+    }
+
     public WebSteps clickOnElement(WebElement element) {
         WaitHelper.waitForClickable(wait, element);
         actions.moveToElement(element).click().perform();

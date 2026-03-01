@@ -4,7 +4,8 @@ public enum URL {
     LIFETIME_MEMBERSHIP("/lifetime-membership-club/", "Страница курса LIFETIME MEMBERSHIP CLUB"),
     LOGIN("/angularjs-protractor/banking/#/login", "Страница Way2Automation Banking App"),
     ADD_CUSTOMER("/angularjs-protractor/banking/#/manager/addCust", "Страница Add customer"),
-    AUTHORIZATION("/angularjs-protractor/registeration/#/login", "Страница авторизации");
+    AUTHORIZATION("/angularjs-protractor/registeration/#/login", "Страница авторизации"),
+    SQL_EX("https://www.sql-ex.ru/", "Страница 'Практическое владение языком SQL'");
 
     private final String url;
     private final String description;

@@ -1,6 +1,7 @@
 package pages.way_2_automation_banking_app;
 
 import base.WebSteps;
+import enums.URL;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,8 +13,6 @@ import org.testng.Assert;
 import utils.WaitHelper;
 
 import java.util.List;
-
-import static enums.URL.ADD_CUSTOMER;
 
 public class ManagerPage {
     public WebDriver driver;
@@ -74,7 +73,7 @@ public class ManagerPage {
 
     @Step("Создать аккаунт покупателя {fullName}")
     public ManagerPage createCustomerWithAccount(String firstNane, String lastName, String postCode, String currency) {
-        webSteps.goToPage(ADD_CUSTOMER.getUrl());
+        webSteps.goToPage(URL.ADD_CUSTOMER.getUrl());
         addCustomer(firstNane, lastName, postCode);
         openAccount(firstNane + " " + lastName, currency);
 
