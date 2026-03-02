@@ -88,4 +88,9 @@ public class AuthorizationPage {
         webChecks.checkElementDisable(btnLogin);
     }
 
+    @Step("Кликнуть на поле 'Username'")
+    public void clickInputUsername() {
+        webSteps.clickOnElement(inputUsername);
+    }
+
 }

@@ -76,4 +76,16 @@ public class AuthorizationTest extends BaseTest {
                 .clickLogout()
                 .checkInputs();
     }
+
+    @Story("Проверка фокуса и скролла")
+    @Severity(SeverityLevel.MINOR)
+    @Test(description = "Проверка отсутствия фокуса в поле и наличия скролла на странице")
+    void checkFocusAndScroll() {
+        authorizationPage.clickInputUsername();
+
+        webSteps.removeFocus();
+
+        webChecks.checkElementFocus(authorizationPage.inputUsername, false)
+                .checkVerticalScroll(false);
+    }
 }
