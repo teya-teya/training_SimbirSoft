@@ -8,8 +8,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestContext;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import utils.ConfigReader;
 import utils.TestListener;
@@ -31,10 +31,6 @@ public class BaseTest {
     static {
         String resultsDir = Paths.get(System.getProperty("user.dir"), "target", "allure-results").toString();
         System.setProperty("allure.results.directory", resultsDir);
-        log.info("📁 Allure results directory: {}", resultsDir);
-
-        log.info("🔑 USERNAME = {}", System.getenv("USERNAME"));
-        log.info("🔑 PASSWORD = {}", System.getenv("PASSWORD") != null ? "задан" : "null");
     }
 
     public WebDriver getDriver() {
@@ -45,7 +41,7 @@ public class BaseTest {
         return waitThread.get();
     }
 
-    @BeforeClass(alwaysRun = true)
+    @BeforeMethod(alwaysRun = true)
     @Step("Открыть браузер через Selenium Grid")
     public void setupClass(ITestContext context) throws Exception {
         log.info("🚀 Запуск браузера через Grid в потоке: {}", Thread.currentThread().getId());
@@ -55,7 +51,7 @@ public class BaseTest {
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-blink-features=AutomationControlled");
         options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation", "enable-logging"});
-        options.setCapability("browserName", "chrome"); // 🔹 обязательно для Grid
+        options.setCapability("browserName", "chrome");
 
         URL hubUrl = new URL(ConfigReader.getProperty("grid.url"));
         WebDriver webDriver = new RemoteWebDriver(hubUrl, options);
@@ -77,7 +73,7 @@ public class BaseTest {
         log.info("✅ Браузер запущен через Grid");
     }
 
-    @AfterClass(alwaysRun = true)
+    @AfterMethod(alwaysRun = true)
     @Step("Закрыть браузер")
     public void closeClass() {
         WebDriver webDriver = driverThread.get();

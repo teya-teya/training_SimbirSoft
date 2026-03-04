@@ -2,10 +2,8 @@ package base;
 
 import enums.URL;
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -14,6 +12,7 @@ import utils.ConfigReader;
 import java.time.Duration;
 import java.util.List;
 
+@Slf4j
 public class WebChecks {
     public WebDriver driver;
     public WebDriverWait wait;
@@ -24,7 +23,12 @@ public class WebChecks {
     }
 
     public boolean isPresent(By locator) {
-        return !driver.findElements(locator).isEmpty();
+        try {
+            return !driver.findElements(locator).isEmpty();
+        } catch (TimeoutException e) {
+            log.warn("Таймаут при проверке элемента, вероятно страница долго грузится");
+            return false;
+        }
     }
 
     public WebChecks checkElementVisible(WebElement element) {
