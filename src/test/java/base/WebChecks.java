@@ -3,6 +3,7 @@ package base;
 import enums.URL;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -99,4 +100,32 @@ public class WebChecks {
         Assert.assertNotNull(element.getAttribute("disabled"), "Элемент должен быть disabled");
     }
 
+
+    @Step("Проверить наличие вертикального скролла: ожидаемое значение — {expected}")
+    public void checkVerticalScroll(boolean expected) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+
+        boolean actual = (Boolean) js.executeScript(
+                "return document.documentElement.scrollHeight > document.documentElement.clientHeight;"
+        );
+
+        Assert.assertEquals(actual, expected,
+                "Ожидали наличие скролла: " + expected + ", фактически: " + actual);
+    }
+
+    @Step("Проверить фокус на элементе — ожидаемое значение: {expected}")
+    public WebChecks checkElementFocus(WebElement element, boolean expected) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+
+        WebElement activeElement = (WebElement) js.executeScript(
+                "return document.activeElement;"
+        );
+
+        boolean actual = element.equals(activeElement);
+
+        Assert.assertEquals(actual, expected,
+                "Ожидали фокус: " + expected + ", фактически: " + actual);
+
+        return this;
+    }
 }

@@ -101,4 +101,10 @@ public class WebSteps {
             WaitHelper.waitForNotVisible(wait, element);
         }
     }
+
+    @Step("Убрать фокус с текущего элемента")
+    public void removeFocus() {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("document.activeElement.blur();");
+    }
 }
