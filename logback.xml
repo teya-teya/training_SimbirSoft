@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Кодировка для русского языка -->
+    <property name="LOG_ENCODING" value="UTF-8" />
+
+    <!-- Аппендер для консоли с русским языком -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Аппендер для файла с русским языком -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/tests.log</file>
+        <append>true</append>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Уровни логирования -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+
+    <!-- Для детального логирования тестов -->
+    <logger name="tests" level="DEBUG" />
+    <logger name="pages" level="DEBUG" />
+    <logger name="base" level="DEBUG" />
+    <logger name="utils" level="DEBUG" />
+</configuration>

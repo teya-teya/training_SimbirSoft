@@ -16,7 +16,7 @@ public class ConfigReader {
             properties.load(input);
 
         } catch (IOException e) {
-            throw new RuntimeException("Ошибка загрузки config.properties");
+            throw new RuntimeException("Ошибка загрузки config.properties", e);
         }
     }
 

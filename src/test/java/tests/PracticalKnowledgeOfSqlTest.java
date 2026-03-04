@@ -35,10 +35,10 @@ public class PracticalKnowledgeOfSqlTest extends BaseTest{
             sqlPage.loadCookiesAndRefresh(URL.SQL_EX);
         } else {
             Allure.step("Авторизация через форму и сохранение куки");
-            sqlPage.authorization(System.getenv("LOGIN"), System.getenv("PASSWORD"));
+            sqlPage.authorization(System.getenv("LOGIN"), System.getenv("PASSWORD2"));
             CookieUtils.saveCookies(driver);
         }
 
-        sqlPage.checkAuthorizationSuccess(System.getenv("USERNAME"));
+        sqlPage.checkAuthorizationSuccess("мягкая булочка");
     }
 }
