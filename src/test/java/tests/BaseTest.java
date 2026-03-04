@@ -4,14 +4,17 @@ import io.qameta.allure.Step;
 import io.qameta.allure.testng.AllureTestNg;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestContext;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Listeners;
 import utils.ConfigReader;
 import utils.TestListener;
 
+import java.net.URL;
 import java.nio.file.Paths;
 import java.time.Duration;
 
@@ -28,6 +31,10 @@ public class BaseTest {
     static {
         String resultsDir = Paths.get(System.getProperty("user.dir"), "target", "allure-results").toString();
         System.setProperty("allure.results.directory", resultsDir);
+        log.info("📁 Allure results directory: {}", resultsDir);
+
+        log.info("🔑 USERNAME = {}", System.getenv("USERNAME"));
+        log.info("🔑 PASSWORD = {}", System.getenv("PASSWORD") != null ? "задан" : "null");
     }
 
     public WebDriver getDriver() {
@@ -39,21 +46,23 @@ public class BaseTest {
     }
 
     @BeforeClass(alwaysRun = true)
-    @Step("Открыть браузер")
-    public void setupClass(ITestContext context) {
+    @Step("Открыть браузер через Selenium Grid")
+    public void setupClass(ITestContext context) throws Exception {
+        log.info("🚀 Запуск браузера через Grid в потоке: {}", Thread.currentThread().getId());
+
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-blink-features=AutomationControlled");
-        options.setExperimentalOption("excludeSwitches", new String[]{
-                "enable-automation", "enable-logging"
-        });
+        options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation", "enable-logging"});
+        options.setCapability("browserName", "chrome"); // 🔹 обязательно для Grid
 
-        WebDriver webDriver = new ChromeDriver(options);
+        URL hubUrl = new URL("http://localhost:4444");
+        WebDriver webDriver = new RemoteWebDriver(hubUrl, options);
+
         webDriver.manage().window().maximize();
-        webDriver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
         webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+        webDriver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
 
         WebDriverWait webDriverWait = new WebDriverWait(webDriver,
                 Duration.ofSeconds(Long.parseLong(ConfigReader.getProperty("timeout"))));
@@ -65,18 +74,19 @@ public class BaseTest {
         this.wait = webDriverWait;
 
         context.setAttribute("driver", webDriver);
-        log.info("✅ Браузер запущен");
+        log.info("✅ Браузер запущен через Grid");
     }
 
     @AfterClass(alwaysRun = true)
     @Step("Закрыть браузер")
-    public void tearDownClass() {
+    public void closeClass() {
         WebDriver webDriver = driverThread.get();
         if (webDriver != null) {
             try {
                 webDriver.quit();
+                log.info("✅ Браузер закрыт в потоке: {}", Thread.currentThread().getId());
             } catch (Exception e) {
-                log.error("Ошибка при закрытии браузера: {}", e.getMessage());
+                log.error("❌ Ошибка при закрытии браузера: {}", e.getMessage());
             } finally {
                 driverThread.remove();
                 waitThread.remove();
