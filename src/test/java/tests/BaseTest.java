@@ -57,7 +57,7 @@ public class BaseTest {
         options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation", "enable-logging"});
         options.setCapability("browserName", "chrome"); // 🔹 обязательно для Grid
 
-        URL hubUrl = new URL("http://localhost:4444");
+        URL hubUrl = new URL(ConfigReader.getProperty("grid.url"));
         WebDriver webDriver = new RemoteWebDriver(hubUrl, options);
 
         webDriver.manage().window().maximize();
