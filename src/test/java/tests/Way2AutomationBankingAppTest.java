@@ -121,6 +121,7 @@ public class Way2AutomationBankingAppTest extends BaseTest {
         webSteps.refreshPage();
         accountPage.clickBtnTransactions();
         WaitHelper.waitForVisible(wait, transactionsPage.table);
+        WaitHelper.waitForVisible(wait, transactionsPage.getRows().get(1));
         transactionsPage.checkTextInCell(transactionsPage.getTransactionCell(1, 1), String.valueOf(amount));
     }
 

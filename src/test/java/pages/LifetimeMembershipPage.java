@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.WaitHelper;
 
 public class LifetimeMembershipPage {
     public WebDriver driver;
@@ -25,6 +26,7 @@ public class LifetimeMembershipPage {
 
     @Step("Проверить отображение заголовка 'LIFETIME MEMBERSHIP CLUB'")
     public void checkTitle() {
+        WaitHelper.waitForVisible(wait, title);
         webChecks.checkTextOnElement(title, "LIFETIME MEMBERSHIP CLUB");
     }
 

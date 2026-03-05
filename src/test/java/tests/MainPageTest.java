@@ -24,7 +24,7 @@ public class MainPageTest extends BaseTest {
         mainPage = new MainPage(driver, wait);
         webSteps = new WebSteps(driver, wait);
         lifetimeMembershipPage = new LifetimeMembershipPage(driver, wait);
-
+        webSteps.goToPage("");
         mainPage.closeBanner();
     }
 
