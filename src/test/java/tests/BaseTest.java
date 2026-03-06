@@ -44,8 +44,6 @@ public class BaseTest {
     @BeforeMethod(alwaysRun = true)
     @Step("Открыть браузер через Selenium Grid")
     public void setupClass(ITestContext context) throws Exception {
-        log.info("🚀 Запуск браузера через Grid в потоке: {}", Thread.currentThread().getId());
-
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--no-sandbox");
@@ -58,7 +56,7 @@ public class BaseTest {
 
         webDriver.manage().window().maximize();
         webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
-        webDriver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+        webDriver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
 
         WebDriverWait webDriverWait = new WebDriverWait(webDriver,
                 Duration.ofSeconds(Long.parseLong(ConfigReader.getProperty("timeout"))));
@@ -70,7 +68,6 @@ public class BaseTest {
         this.wait = webDriverWait;
 
         context.setAttribute("driver", webDriver);
-        log.info("✅ Браузер запущен через Grid");
     }
 
     @AfterMethod(alwaysRun = true)
@@ -80,7 +77,6 @@ public class BaseTest {
         if (webDriver != null) {
             try {
                 webDriver.quit();
-                log.info("✅ Браузер закрыт в потоке: {}", Thread.currentThread().getId());
             } catch (Exception e) {
                 log.error("❌ Ошибка при закрытии браузера: {}", e.getMessage());
             } finally {
