@@ -4,17 +4,15 @@ import io.qameta.allure.Step;
 import io.qameta.allure.testng.AllureTestNg;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import utils.ConfigReader;
+import utils.DriverFactory;
 import utils.TestListener;
 
-import java.net.URL;
 import java.nio.file.Paths;
 import java.time.Duration;
 
@@ -42,24 +40,19 @@ public class BaseTest {
     }
 
     @BeforeMethod(alwaysRun = true)
-    @Step("Открыть браузер через Selenium Grid")
+    @Step("Открыть браузер")
     public void setupClass(ITestContext context) throws Exception {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-blink-features=AutomationControlled");
-        options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation", "enable-logging"});
-        options.setCapability("browserName", "chrome");
 
-        URL hubUrl = new URL(ConfigReader.getProperty("grid.url"));
-        WebDriver webDriver = new RemoteWebDriver(hubUrl, options);
+        WebDriver webDriver = DriverFactory.createDriver();
 
         webDriver.manage().window().maximize();
         webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
         webDriver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
 
-        WebDriverWait webDriverWait = new WebDriverWait(webDriver,
-                Duration.ofSeconds(Long.parseLong(ConfigReader.getProperty("timeout"))));
+        WebDriverWait webDriverWait = new WebDriverWait(
+                webDriver,
+                Duration.ofSeconds(Long.parseLong(ConfigReader.getProperty("timeout")))
+        );
 
         driverThread.set(webDriver);
         waitThread.set(webDriverWait);
