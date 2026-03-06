@@ -5,7 +5,8 @@ public enum URL {
     LOGIN("/angularjs-protractor/banking/#/login", "Страница Way2Automation Banking App"),
     ADD_CUSTOMER("/angularjs-protractor/banking/#/manager/addCust", "Страница Add customer"),
     AUTHORIZATION("/angularjs-protractor/registeration/#/login", "Страница авторизации"),
-    SQL_EX("https://www.sql-ex.ru/", "Страница 'Практическое владение языком SQL'");
+    SQL_EX("https://www.sql-ex.ru/", "Страница 'Практическое владение языком SQL'"),
+    DROPPABLE("/way2auto_jquery/droppable.php", "Страница Droppable");
 
     private final String url;
     private final String description;

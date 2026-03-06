@@ -107,4 +107,19 @@ public class WebSteps {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("document.activeElement.blur();");
     }
+
+    @Step("Переключится на iFrame")
+    public void switchIframe(WebElement iframe) {
+        driver.switchTo().frame(iframe);
+    }
+
+    public void dragAndDrop(WebElement source, WebElement target) {
+        actions.dragAndDrop(source, target).perform();
+    }
+
+    @Step("Получить текст из элемента")
+    public String getText(WebElement element) {
+        WaitHelper.waitForVisible(wait, element);
+        return element.getText();
+    }
 }
