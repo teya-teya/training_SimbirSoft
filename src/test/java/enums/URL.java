@@ -7,7 +7,8 @@ public enum URL {
     AUTHORIZATION("/angularjs-protractor/registeration/#/login", "Страница авторизации"),
     SQL_EX("https://www.sql-ex.ru/", "Страница 'Практическое владение языком SQL'"),
     DROPPABLE("/way2auto_jquery/droppable.php", "Страница Droppable"),
-    FRAMES_AND_WINDOWS("/way2auto_jquery/frames-and-windows.php", "Страница Frames And Windows");
+    FRAMES_AND_WINDOWS("/way2auto_jquery/frames-and-windows.php", "Страница Frames And Windows"),
+    ALERT("/way2auto_jquery/alert.php", "Страница Alert");
 
     private final String url;
     private final String description;
