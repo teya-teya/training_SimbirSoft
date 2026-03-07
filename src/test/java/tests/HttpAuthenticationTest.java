@@ -23,7 +23,7 @@ public class HttpAuthenticationTest extends BaseTest{
 
     @Story("Проверка базовой аутентификации")
     @Severity(SeverityLevel.CRITICAL)
-    @Test(description = "Проверка успешной авторизации через Basic Auth")
+    @Test(groups = "auth", description = "Проверка успешной авторизации через Basic Auth")
     void checkSuccessfulBasicAuth() {
         httpAuthenticationPage.scrollAndClickBtnDisplayImage()
                 .enableBasicAuth(System.getenv("LOGIN_HTTP"), System.getenv("PASSWORD_HTTP"))

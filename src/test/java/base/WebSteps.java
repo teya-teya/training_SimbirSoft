@@ -92,11 +92,9 @@ public class WebSteps {
     }
 
     @Step("Нажать кнопку 'Ок' в браузерном уведомлении")
-    public WebSteps clickOkInAlert() {
+    public void clickOkInAlert() {
         Alert alert = wait.until(ExpectedConditions.alertIsPresent());
         alert.accept();
-
-        return this;
     }
 
     @Step("Заполнить поле текстом '{text}' в браузерном уведомлении")
