@@ -132,4 +132,11 @@ public class WebChecks {
 
         return this;
     }
+
+    @Step("Проверить, что открыто {countTabs} вкладки браузера")
+    public void checkCountTabsBrowser(int countTabs) {
+        int actualCount = driver.getWindowHandles().size();
+        Assert.assertEquals(actualCount, countTabs,
+                "Вкладок должно быть " + countTabs + ", но их " + actualCount);
+    }
 }

@@ -10,8 +10,7 @@ import pages.PracticalKnowledgeOfSqlPage;
 import utils.CookieUtils;
 
 @Epic("UI тесты")
-@Feature("Авторизация")
-@Test(description = "Проверка авторизации с куками")
+@Feature("Авторизация с куками")
 public class PracticalKnowledgeOfSqlTest extends BaseTest{
     WebChecks webChecks;
     WebSteps webSteps;

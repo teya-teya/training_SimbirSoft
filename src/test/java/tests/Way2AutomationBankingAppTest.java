@@ -13,7 +13,6 @@ import utils.WaitHelper;
 
 @Epic("UI тесты")
 @Feature("Way2Automation Banking App")
-@Test(description = "Страница Way2Automation Banking App")
 public class Way2AutomationBankingAppTest extends BaseTest {
     LoginPage loginPage;
     WebChecks webChecks;

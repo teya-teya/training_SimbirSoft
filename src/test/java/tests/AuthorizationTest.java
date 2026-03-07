@@ -12,7 +12,6 @@ import utils.RandomUtils;
 
 @Epic("UI тесты")
 @Feature("Авторизация")
-@Test(description = "Проверка авторизации")
 public class AuthorizationTest extends BaseTest {
     WebChecks webChecks;
     WebSteps webSteps;
