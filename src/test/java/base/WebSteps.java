@@ -45,9 +45,11 @@ public class WebSteps {
         return this;
     }
 
-    public void scrollToElement(WebElement element) {
+    public WebSteps scrollToElement(WebElement element) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
+
+        return this;
     }
 
     public WebSteps selectOptionByText(WebElement dpd, String option) {
@@ -90,11 +92,9 @@ public class WebSteps {
     }
 
     @Step("Нажать кнопку 'Ок' в браузерном уведомлении")
-    public WebSteps clickOkInAlert() {
+    public void clickOkInAlert() {
         Alert alert = wait.until(ExpectedConditions.alertIsPresent());
         alert.accept();
-
-        return this;
     }
 
     @Step("Заполнить поле текстом '{text}' в браузерном уведомлении")
