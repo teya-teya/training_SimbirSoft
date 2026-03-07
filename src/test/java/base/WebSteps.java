@@ -45,9 +45,11 @@ public class WebSteps {
         return this;
     }
 
-    public void scrollToElement(WebElement element) {
+    public WebSteps scrollToElement(WebElement element) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
+
+        return this;
     }
 
     public WebSteps selectOptionByText(WebElement dpd, String option) {

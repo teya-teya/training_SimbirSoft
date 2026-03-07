@@ -8,7 +8,8 @@ public enum URL {
     SQL_EX("https://www.sql-ex.ru/", "Страница 'Практическое владение языком SQL'"),
     DROPPABLE("/way2auto_jquery/droppable.php", "Страница Droppable"),
     FRAMES_AND_WINDOWS("/way2auto_jquery/frames-and-windows.php", "Страница Frames And Windows"),
-    ALERT("/way2auto_jquery/alert.php", "Страница Alert");
+    ALERT("/way2auto_jquery/alert.php", "Страница Alert"),
+    HTTP_AUTHENTICATION("https://www.httpwatch.com/httpgallery/authentication/#showExample10", "Страница HTTP Authentication");
 
     private final String url;
     private final String description;
