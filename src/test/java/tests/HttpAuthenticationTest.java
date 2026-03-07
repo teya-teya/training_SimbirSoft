@@ -2,13 +2,13 @@ package tests;
 
 import base.WebSteps;
 import enums.URL;
-import io.qameta.allure.Severity;
-import io.qameta.allure.SeverityLevel;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.HttpAuthenticationPage;
 
+@Epic("UI тесты")
+@Feature("Базовая аутентификация")
 public class HttpAuthenticationTest extends BaseTest{
     WebSteps webSteps;
     HttpAuthenticationPage httpAuthenticationPage;
