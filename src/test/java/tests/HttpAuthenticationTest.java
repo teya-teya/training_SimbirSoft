@@ -21,10 +21,10 @@ public class HttpAuthenticationTest extends BaseTest{
         webSteps.goToPageFullLink(URL.HTTP_AUTHENTICATION.getUrl());
     }
 
-    @Story("Проверка видимости полей ввода на странице авторизации")
-    @Severity(SeverityLevel.NORMAL)
-    @Test(description = "Проверка полей ввода")
-    void checkLoginInputFields() {
+    @Story("Проверка базовой аутентификации")
+    @Severity(SeverityLevel.CRITICAL)
+    @Test(description = "Проверка успешной авторизации через Basic Auth")
+    void checkSuccessfulBasicAuth() {
         httpAuthenticationPage.scrollAndClickBtnDisplayImage()
                 .enableBasicAuth(System.getenv("LOGIN_HTTP"), System.getenv("PASSWORD_HTTP"))
                 .checkSuccessAuthentication();
