@@ -11,7 +11,6 @@ import pages.MainPage;
 
 @Epic("UI тесты")
 @Feature("Главная страница")
-@Test(description = "Главная страница")
 public class MainPageTest extends BaseTest {
     MainPage mainPage;
     WebChecks webChecks;

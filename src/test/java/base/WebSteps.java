@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.ConfigReader;
 import utils.WaitHelper;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -26,8 +27,10 @@ public class WebSteps {
     }
 
     @Step("Перейти на страницу {url}")
-    public void goToPage(String url) {
+    public WebSteps goToPage(String url) {
         driver.navigate().to(ConfigReader.getProperty("base.url") + url);
+
+        return this;
     }
 
     @Step("Перейти на страницу {url}")
@@ -57,6 +60,7 @@ public class WebSteps {
 
     /**
      * Метод для получения полей по заголовку на ним
+     *
      * @param label - текст заголовка над полем
      * @return поле
      */
@@ -121,5 +125,13 @@ public class WebSteps {
     public String getText(WebElement element) {
         WaitHelper.waitForVisible(wait, element);
         return element.getText();
+    }
+
+    @Step("Переключиться на вкладку {tab} в браузере")
+    public void switchToTab(int tab) {
+        WaitHelper.waitForNumberOfTabs(wait, tab);
+
+        List<String> tabs = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(tabs.get(tab - 1));
     }
 }

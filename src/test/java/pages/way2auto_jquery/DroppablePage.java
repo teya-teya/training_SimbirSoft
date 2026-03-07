@@ -1,4 +1,4 @@
-package pages;
+package pages.way2auto_jquery;
 
 import base.WebSteps;
 import io.qameta.allure.Step;

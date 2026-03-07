@@ -23,4 +23,8 @@ public class WaitHelper {
     public static void waitForElementsVisible(WebDriverWait wait, List<WebElement> elements) {
         wait.until(ExpectedConditions.visibilityOfAllElements(elements));
     }
+
+    public static void waitForNumberOfTabs(WebDriverWait wait, int expectedTabs) {
+        wait.until(ExpectedConditions.numberOfWindowsToBe(expectedTabs));
+    }
 }
