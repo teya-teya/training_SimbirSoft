@@ -4,6 +4,7 @@ import base.WebChecks;
 import base.WebSteps;
 import enums.URL;
 import io.qameta.allure.*;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.PracticalKnowledgeOfSqlPage;
@@ -23,6 +24,13 @@ public class PracticalKnowledgeOfSqlTest extends BaseTest{
         sqlPage = new PracticalKnowledgeOfSqlPage(driver, wait);
 
         webSteps.goToPageFullLink(URL.SQL_EX.getUrl());
+    }
+
+    @AfterClass(alwaysRun = true)
+    public void clearCookies() {
+        if (driver != null) {
+            driver.manage().deleteAllCookies();
+        }
     }
 
     @Story("Авторизация на странице 'Практическое владение языком SQL'")

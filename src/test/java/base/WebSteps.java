@@ -90,9 +90,19 @@ public class WebSteps {
     }
 
     @Step("Нажать кнопку 'Ок' в браузерном уведомлении")
-    public void clickOkInAlert() {
+    public WebSteps clickOkInAlert() {
         Alert alert = wait.until(ExpectedConditions.alertIsPresent());
         alert.accept();
+
+        return this;
+    }
+
+    @Step("Заполнить поле текстом '{text}' в браузерном уведомлении")
+    public WebSteps fillInputAlert(String text) {
+        Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+        alert.sendKeys(text);
+
+        return this;
     }
 
     @Step("Обновить страницу")
@@ -113,8 +123,10 @@ public class WebSteps {
     }
 
     @Step("Переключится на iFrame")
-    public void switchIframe(WebElement iframe) {
+    public WebSteps switchIframe(WebElement iframe) {
         driver.switchTo().frame(iframe);
+
+        return this;
     }
 
     public void dragAndDrop(WebElement source, WebElement target) {

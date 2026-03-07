@@ -20,14 +20,28 @@ public class CookieUtils {
     }
 
     public static void loadCookies(WebDriver driver) {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(COOKIE_FILE))) {
-            driver.manage().deleteAllCookies();
-            Set<Cookie> cookies = (Set<Cookie>) ois.readObject();
-            for (Cookie cookie : cookies) {
-                driver.manage().addCookie(cookie);
-            }
-        } catch (Exception e) {
+        File file = new File(COOKIE_FILE);
+        if (!file.exists()) {
             System.out.println("Cookie file not found — авторизуемся заново");
+            return;
+        }
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            Set<Cookie> cookies = (Set<Cookie>) ois.readObject();
+            if (cookies == null || cookies.isEmpty()) return;
+
+            driver.manage().deleteAllCookies();
+
+            for (Cookie cookie : cookies) {
+                try {
+                    driver.manage().addCookie(cookie);
+                } catch (Exception e) {
+                    System.out.println("Не удалось добавить куку " + cookie.getName() + ": " + e.getMessage());
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println("Ошибка при загрузке cookies: " + e.getMessage());
         }
     }
 
